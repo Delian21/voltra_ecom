@@ -7,7 +7,7 @@ Voltra is a storefront for direct-sourced electronics — power banks, earbuds, 
 - **B2C** — browse the catalog, fill a cart, check out (checkout is a stub in this phase).
 - **B2B** — retailers get wholesale pricing (×10 per SKU), trade-credit dashboard, stock-health tracking, and restock plans.
 
-The product logic and design spec live in [`PLAN.md`](./PLAN.md) (source of truth) and `Voltra_Pages_Guide.pdf` (original product guide).
+Product logic and design spec: [`PLAN.md`](./PLAN.md) is the source of truth; `Voltra_Pages_Guide.pdf` is the original product guide.
 
 ## Tech stack
 
@@ -26,7 +26,7 @@ The product logic and design spec live in [`PLAN.md`](./PLAN.md) (source of trut
 |---|---|
 | `/` | Landing: brand, value props, audience entry points |
 | `/shop`, `/shop/[slug]` | Catalog with search + category filters; product detail |
-| `/cart` | Persistent cart (unit + wholesale lines, wholesale steps ×10) |
+| `/cart` | Persistent cart (unit + wholesale lines; wholesale steps ×10) |
 | `/checkout` (+ `/checkout/confirmation`) | Stub — address + payment method UI, "not live" |
 | `/retailer` | B2B dashboard: balance, stock health, recent orders |
 | `/retailer/bulk` | Wholesale catalog, add ×10 lines |
@@ -50,6 +50,7 @@ npm run build      # production build (same command Netlify runs)
 npm run start      # serve the production build
 npm run lint       # eslint
 npm run e2e        # Playwright end-to-end tests
+npm run e2e:headed # same, with a visible browser
 ```
 
 ## Where things live
@@ -61,6 +62,7 @@ src/
                      # retailer/, landing/, messages/, checkout/, settings/
   lib/
     types.ts         # Product, CartLine, Order, RetailerAccount, RestockPlan, ...
+    stock-health.ts  # stock threshold helpers (150 / 60 → Healthy / Monitor / Reorder soon)
     data/            # async data modules (catalog, orders, retailer, messages)
     store/           # zustand stores (cart, auth, prefs, quotes, restock)
   hooks/
@@ -70,7 +72,7 @@ src/
 
 ## Deployment
 
-The site deploys to [Netlify](https://www.netlify.com) from GitHub:
+The site deploys to [Netlify](https://www.netlify.com) from GitHub (`.netlify-install.log` in the repo root confirms the Netlify build runs against this checkout):
 
 1. Push to `main` (VSCode → Source Control → Commit → Sync).
 2. Netlify rebuilds automatically (`npm run build`, publish dir `.next`).
