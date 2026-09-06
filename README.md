@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Voltra
 
-## Getting Started
+**Always on. Never out.**
 
-First, run the development server:
+Voltra is a storefront for direct-sourced electronics — power banks, earbuds, headsets, chargers, cables, cases — priced in ₦. One codebase serves two audiences:
+
+- **B2C** — browse the catalog, fill a cart, check out (checkout is a stub in this phase).
+- **B2B** — retailers get wholesale pricing (×10 per SKU), trade-credit dashboard, stock-health tracking, and restock plans.
+
+The product logic and design spec live in [`PLAN.md`](./PLAN.md) (source of truth) and `Voltra_Pages_Guide.pdf` (original product guide).
+
+## Tech stack
+
+| Layer | Choice |
+|---|---|
+| Framework | [Next.js 16](https://nextjs.org) (App Router) + TypeScript |
+| Styling | Tailwind CSS 4 + shadcn/ui (copied into `src/components/ui`) |
+| Design | **Volt Dark** — graphite surfaces, volt-lime accent `#C6FF3E`, Space Grotesk / Inter / JetBrains Mono |
+| State | Zustand with `persist` (cart, auth, prefs) |
+| Data | Mock-first: localStorage-backed modules behind async interfaces |
+| Tests | Playwright (`e2e/voltra.spec.ts`) |
+
+## Routes
+
+| Route | Purpose |
+|---|---|
+| `/` | Landing: brand, value props, audience entry points |
+| `/shop`, `/shop/[slug]` | Catalog with search + category filters; product detail |
+| `/cart` | Persistent cart (unit + wholesale lines, wholesale steps ×10) |
+| `/checkout` (+ `/checkout/confirmation`) | Stub — address + payment method UI, "not live" |
+| `/retailer` | B2B dashboard: balance, stock health, recent orders |
+| `/retailer/bulk` | Wholesale catalog, add ×10 lines |
+| `/retailer/quote`, `/retailer/restock` | Quote requests; set-and-forget restock plans |
+| `/settings` | Notification channels, saved payment methods |
+| `/messages` | Inbox / new message |
+
+## Getting started
+
+Requires **Node 20+**.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Other scripts:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build      # production build (same command Netlify runs)
+npm run start      # serve the production build
+npm run lint       # eslint
+npm run e2e        # Playwright end-to-end tests
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Where things live
 
-## Learn More
+```
+src/
+  app/               # routes (App Router)
+  components/        # ui/ = shadcn primitives; shell/, shop/, cart/, product/,
+                     # retailer/, landing/, messages/, checkout/, settings/
+  lib/
+    types.ts         # Product, CartLine, Order, RetailerAccount, RestockPlan, ...
+    data/            # async data modules (catalog, orders, retailer, messages)
+    store/           # zustand stores (cart, auth, prefs, quotes, restock)
+  hooks/
+```
 
-To learn more about Next.js, take a look at the following resources:
+**Mock-data seam:** components never touch storage directly — all data access goes through `src/lib/data/*` as async functions. When the backend phase starts, those modules get swapped for fetch-based implementations with the same signatures; no component rewrites.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The site deploys to [Netlify](https://www.netlify.com) from GitHub:
 
-## Deploy on Vercel
+1. Push to `main` (VSCode → Source Control → Commit → Sync).
+2. Netlify rebuilds automatically (`npm run build`, publish dir `.next`).
+3. Share the `*.netlify.app` URL (or a password-protected deploy preview) with reviewers.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Product imagery is placeholder art for now; real photography lands later. Retailer dashboard numbers are sample data, flagged as such in the UI.
