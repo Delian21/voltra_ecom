@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Voltra — Accent comparison (Volt Dark)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg0:#0A0C10; --bg1:#10131A; --bg2:#171B24; --bg3:#1F2533;
+    --line:rgba(255,255,255,0.08); --line-strong:rgba(255,255,255,0.14);
+    --ink-hi:#F4F6FA; --ink-mid:#9AA3B2; --ink-low:#5C6472;
+    --warn:#F59E0B; --warn-bg:rgba(245,158,11,0.12);
+    --bad:#EF4444; --bad-bg:rgba(239,68,68,0.12);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+    background:var(--bg0); color:var(--ink-hi); -webkit-font-smoothing:antialiased;
+  }
+  .page{max-width:1180px; margin:0 auto; padding:36px 22px 90px;}
+  header.intro{margin-bottom:30px;}
+  .kicker{font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.14em;
+    color:var(--ink-low); text-transform:uppercase; margin-bottom:10px;}
+  h1{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(24px,3.4vw,34px);
+    letter-spacing:-0.02em;}
+  .intro p{color:var(--ink-mid); font-size:14px; margin-top:10px; max-width:640px; line-height:1.6;}
+
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:22px;}
+  @media (max-width:920px){ .grid{grid-template-columns:1fr;} }
+
+  /* ---- shared panel shell ---- */
+  .panel{ --accent:#C6FF3E; --accent-ink:#0A0C10; --accent-text:#D8FF78; --good:#2DD4BF;
+          border:1px solid var(--line); border-radius:14px; background:var(--bg1);
+          overflow:hidden; display:flex; flex-direction:column; }
+  .panel.blue{ --accent:#3B82F6; --accent-ink:#FFFFFF; --accent-text:#7FB1FF; --good:#22C55E; }
+  .panel .pad{padding:22px;}
+  .panel-head{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+  .panel-title{font-family:'Space Grotesk',sans-serif; font-size:17px; font-weight:600;}
+  .panel-swatch{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink-mid);}
+
+  .hero{position:relative; overflow:hidden; padding:22px 22px 18px;
+    background:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(160deg, color-mix(in srgb, var(--accent) 7%, var(--bg1)), var(--bg1) 55%);
+    background-size:26px 26px, 26px 26px, 100% 100%;
+    border-bottom:1px solid var(--line);}
+  .logo{display:flex; align-items:center; gap:11px;}
+  .mark{width:36px; height:36px; border-radius:10px; background:var(--accent); color:var(--accent-ink);
+    display:flex; align-items:center; justify-content:center; flex:none;}
+  .mark svg{width:19px; height:19px;}
+  .word{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:20px; letter-spacing:-0.01em;}
+  .tag{font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--ink-low); margin-top:14px;}
+  .tag b{color:var(--accent-text); font-weight:600;}
+
+  .sec-label{font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--ink-low); margin:18px 0 10px;}
+
+  .chips{display:flex; gap:8px; flex-wrap:wrap;}
+  .chip{font-size:12px; padding:6px 13px; border-radius:999px; border:1px solid var(--line-strong);
+    background:var(--bg2); color:var(--ink-mid);}
+  .chip.active{border-color:var(--accent); color:var(--accent-text);
+    background:color-mix(in srgb, var(--accent) 10%, transparent);}
+
+  .card{border:1px solid var(--line); border-radius:12px; background:var(--bg2); overflow:hidden;}
+  .thumb{height:120px; position:relative; display:flex; align-items:center; justify-content:center;
+    background:
+      radial-gradient(120px 90px at 70% 20%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 70%),
+      linear-gradient(150deg, #1B2130, #12161F);}
+  .thumb svg{width:56px; height:56px; color:var(--ink-low); opacity:.9;}
+  .eyebrow{font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--accent-text);}
+  .card .body{padding:14px 16px 16px;}
+  .c-name{font-size:13.5px; font-weight:600; margin:5px 0 3px;}
+  .c-meta{font-size:12px; color:var(--ink-mid); margin-bottom:12px;}
+  .c-row{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; gap:8px;}
+  .price{font-family:'JetBrains Mono',monospace; font-size:15px; font-weight:600;}
+  .pill{font-family:'JetBrains Mono',monospace; font-size:9.5px; font-weight:600; padding:3px 8px;
+    border-radius:999px; color:#03101B; background:var(--good);}
+  .cta-row{display:flex; gap:8px;}
+  .btn{flex:1; border:none; cursor:pointer; font-family:'Inter',sans-serif; font-size:12.5px; font-weight:600;
+    padding:10px 0; border-radius:8px;}
+  .btn.primary{background:var(--accent); color:var(--accent-ink); transition:filter .15s ease;}
+  .btn.primary:hover{filter:brightness(1.08);}
+  .btn.ghost{flex:0 0 auto; background:transparent; color:var(--ink-mid); border:1px solid var(--line-strong);}
+
+  .swatches{display:flex; gap:10px; align-items:center;}
+  .sw{width:46px; height:46px; border-radius:10px; border:1px solid var(--line-strong); position:relative;}
+  .sw small{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:.02em; text-align:center; line-height:1.25;}
+  .sw.a{background:var(--accent);} .sw.a small{color:var(--accent-ink);}
+  .sw.t{background:var(--accent-text);} .sw.t small{color:#0A0C10;}
+  .sw.g{background:color-mix(in srgb, var(--accent) 12%, transparent); border-style:dashed;}
+  .sw.g small{color:var(--accent-text);}
+  .swhint{font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--ink-low); line-height:1.7;}
+  .swhint b{color:var(--ink-mid);}
+
+  .statuses{display:flex; gap:8px; flex-wrap:wrap;}
+  .spill{font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; padding:4px 10px; border-radius:999px;}
+  .spill.good{color:var(--good); background:color-mix(in srgb, var(--good) 14%, transparent);}
+  .spill.warn{color:var(--warn); background:var(--warn-bg);}
+  .spill.bad{color:var(--bad); background:var(--bad-bg);}
+
+  .notes{border-top:1px solid var(--line); margin-top:auto;}
+  .notes ul{list-style:none;}
+  .notes li{font-size:12.5px; color:var(--ink-mid); line-height:1.55; padding:7px 0; border-bottom:1px dashed var(--line);}
+  .notes li:last-child{border-bottom:none;}
+  .notes li b{color:var(--ink-hi); font-weight:600;}
+  .notes .pick{color:var(--accent-text);}
+
+  .verdict{margin-top:26px; border:1px solid var(--line); border-left:3px solid var(--accent,#C6FF3E);
+    background:var(--bg1); border-radius:0 12px 12px 0; padding:16px 18px; font-size:13.5px; color:var(--ink-mid);
+    max-width:760px; line-height:1.65;}
+  .verdict b{color:var(--ink-hi);}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="intro">
+    <div class="kicker">Voltra · Volt Dark · accent decision</div>
+    <h1>Volt-Lime vs Electric Blue</h1>
+    <p>Identical product card, hero band, chips and status pills — only the accent variable changes. Scroll each
+    panel and pick the one that feels like the brand. Hex values are shown in each swatch strip.</p>
+  </header>
+
+  <div class="grid">
+
+    <!-- ============ VOLT-LIME ============ -->
+    <section class="panel lime">
+      <div class="hero">
+        <div class="logo">
+          <div class="mark">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 2 4 13.5h5.4L8 22l9.5-11.5h-5.4L13.5 2Z"/></svg>
+          </div>
+          <div class="word">Voltra</div>
+        </div>
+        <div class="tag">Brand moment · accent as <b>energy</b></div>
+      </div>
+
+      <div class="pad">
+        <div class="sec-label">Catalog chrome</div>
+        <div class="chips">
+          <span class="chip active">All</span>
+          <span class="chip">Power Banks</span>
+          <span class="chip">Earphones</span>
+          <span class="chip">Accessories</span>
+        </div>
+
+        <div class="sec-label">Product card</div>
+        <div class="card">
+          <div class="thumb">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 2 4 13.5h5.4L8 22l9.5-11.5h-5.4L13.5 2Z"/></svg>
+          </div>
+          <div class="body">
+            <div class="eyebrow">Power banks</div>
+            <div class="c-name">Voltra 20,000mAh Power Bank</div>
+            <div class="c-meta">18W fast charge · dual USB-C</div>
+            <div class="c-row">
+              <span class="price">₦26,500</span>
+              <span class="pill">220 in stock</span>
+            </div>
+            <div class="cta-row">
+              <button class="btn primary">Add to cart</button>
+              <button class="btn ghost">Notify</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="sec-label">Accent tokens</div>
+        <div class="swatches">
+          <div class="sw a"><small>ACCENT<br>#C6FF3E</small></div>
+          <div class="sw t"><small>TEXT-ON-<br>DARK<br>#D8FF78</small></div>
+          <div class="sw g"><small>12% TINT<br>fill</small></div>
+        </div>
+        <div class="swhint" style="margin-top:10px;">
+          CTA text = <b>#0A0C10</b> (near-black on lime) · focus rings &amp; active states use the 12% tint
+        </div>
+
+        <div class="sec-label">Status set</div>
+        <div class="statuses">
+          <span class="spill good">Healthy</span>
+          <span class="spill warn">Monitor</span>
+          <span class="spill bad">Reorder soon</span>
+        </div>
+        <div class="swhint" style="margin-top:10px;">With lime, success drifts toward <b>teal #2DD4BF</b> so “in stock” never reads as the accent.</div>
+      </div>
+
+      <div class="notes">
+        <div class="pad" style="padding-top:0;">
+          <ul>
+            <li><b>Vibe:</b> <span class="pick">energy, voltage, “live wire”.</span> Nothing else in e-commerce looks like this — it owns the word Voltra.</li>
+            <li><b>On dark graphite it pops hard</b> — the card grid reads as a product wall with real character.</li>
+            <li><b>Trade-off:</b> shares a green family with stock/status colors → we push success toward teal (done above).</li>
+            <li><b>Risk:</b> love-it-or-hate-it. Lime demands restraint everywhere else — which Volt Dark already provides.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ELECTRIC BLUE ============ -->
+    <section class="panel blue">
+      <div class="hero">
+        <div class="logo">
+          <div class="mark">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 2 4 13.5h5.4L8 22l9.5-11.5h-5.4L13.5 2Z"/></svg>
+          </div>
+          <div class="word">Voltra</div>
+        </div>
+        <div class="tag">Brand moment · accent as <b>trust</b></div>
+      </div>
+
+      <div class="pad">
+        <div class="sec-label">Catalog chrome</div>
+        <div class="chips">
+          <span class="chip active">All</span>
+          <span class="chip">Power Banks</span>
+          <span class="chip">Earphones</span>
+          <span class="chip">Accessories</span>
+        </div>
+
+        <div class="sec-label">Product card</div>
+        <div class="card">
+          <div class="thumb">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 2 4 13.5h5.4L8 22l9.5-11.5h-5.4L13.5 2Z"/></svg>
+          </div>
+          <div class="body">
+            <div class="eyebrow">Power banks</div>
+            <div class="c-name">Voltra 20,000mAh Power Bank</div>
+            <div class="c-meta">18W fast charge · dual USB-C</div>
+            <div class="c-row">
+              <span class="price">₦26,500</span>
+              <span class="pill">220 in stock</span>
+            </div>
+            <div class="cta-row">
+              <button class="btn primary">Add to cart</button>
+              <button class="btn ghost">Notify</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="sec-label">Accent tokens</div>
+        <div class="swatches">
+          <div class="sw a"><small>ACCENT<br>#3B82F6</small></div>
+          <div class="sw t"><small>TEXT-ON-<br>DARK<br>#7FB1FF</small></div>
+          <div class="sw g"><small>12% TINT<br>fill</small></div>
+        </div>
+        <div class="swhint" style="margin-top:10px;">
+          CTA text = <b>#FFFFFF</b> (white on blue) · focus rings &amp; active states use the 12% tint
+        </div>
+
+        <div class="sec-label">Status set</div>
+        <div class="statuses">
+          <span class="spill good">Healthy</span>
+          <span class="spill warn">Monitor</span>
+          <span class="spill bad">Reorder soon</span>
+        </div>
+        <div class="swhint" style="margin-top:10px;">Blue keeps classic green/amber/red — statuses stay textbook and instantly readable.</div>
+      </div>
+
+      <div class="notes">
+        <div class="pad" style="padding-top:0;">
+          <ul>
+            <li><b>Vibe:</b> <span class="pick">trust, clarity, “serious hardware store”.</span> The safe, familiar choice for commerce.</li>
+            <li><b>Status colors pop cleanly</b> — green/amber/red sit far from blue, zero palette collisions.</li>
+            <li><b>Trade-off:</b> reads “another tech blue” — Stripe, Linear, Paystack, half the SaaS world live here.</li>
+            <li><b>Risk:</b> on graphite it can feel corporate rather than electric; brand distinctiveness is weaker.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="verdict">
+    <b>My call: volt-lime.</b> Voltra is a brand built on the word <b>voltage</b> — lime-on-graphite makes that literal
+    and it’s nearly unused in commerce, so the site is recognizable before the logo is read. Blue is the safe
+    default, but safe is what the old cream-paper prototype already was. The only real cost of lime (status-color
+    collision) is already solved above by shifting success to teal. If it feels like too much, electric blue is a
+    one-line swap in the token file — the design doesn’t change anywhere else.
+  </div>
+</div>
+</body>
+</html>

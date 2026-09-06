@@ -1,0 +1,159 @@
+/* ============================================================
+   Volt Dark tokens (PLAN.md §5 — APPROVED)
+   Accent: volt-lime #C6FF3E · success shifted to teal #2DD4BF
+   ============================================================ */
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+:root {
+  /* Surfaces */
+  --bg0: #0a0c10;
+  --bg1: #10131a;
+  --bg2: #171b24;
+  --bg3: #1f2533;
+
+  /* Ink */
+  --ink-hi: #f4f6fa;
+  --ink-mid: #9aa3b2;
+  --ink-low: #5c6472;
+
+  /* Hairlines */
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.14);
+
+  /* Brand */
+  --volt: #c6ff3e;
+  --volt-ink: #0a0c10;
+  --volt-text: #d8ff78;
+
+  /* Status */
+  --good: #2dd4bf;
+  --good-bg: rgba(45, 212, 191, 0.12);
+  --warn: #f59e0b;
+  --warn-bg: rgba(245, 158, 11, 0.12);
+  --bad: #ef4444;
+  --bad-bg: rgba(239, 68, 68, 0.12);
+
+  --whatsapp: #25d366;
+
+  /* shadcn semantic mapping (dark-only theme) */
+  --background: var(--bg0);
+  --foreground: var(--ink-hi);
+  --card: var(--bg1);
+  --card-foreground: var(--ink-hi);
+  --popover: var(--bg1);
+  --popover-foreground: var(--ink-hi);
+  --primary: var(--volt);
+  --primary-foreground: var(--volt-ink);
+  --secondary: var(--bg2);
+  --secondary-foreground: var(--ink-hi);
+  --muted: var(--bg2);
+  --muted-foreground: var(--ink-mid);
+  --accent: var(--bg2);
+  --accent-foreground: var(--ink-hi);
+  --destructive: var(--bad);
+  --destructive-foreground: #ffffff;
+  --border: var(--line);
+  --input: var(--line-strong);
+  --ring: var(--volt);
+  --chart-1: var(--volt);
+  --chart-2: var(--good);
+  --chart-3: #3b82f6;
+  --chart-4: var(--warn);
+  --chart-5: var(--bad);
+  --radius: 0.5rem;
+  --sidebar: var(--bg1);
+  --sidebar-foreground: var(--ink-hi);
+  --sidebar-primary: var(--volt);
+  --sidebar-primary-foreground: var(--volt-ink);
+  --sidebar-accent: var(--bg2);
+  --sidebar-accent-foreground: var(--ink-hi);
+  --sidebar-border: var(--line);
+  --sidebar-ring: var(--volt);
+}
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
+  --font-display: var(--font-space-grotesk);
+  --font-heading: var(--font-space-grotesk);
+
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  /* Volt custom utilities */
+  --color-bg0: var(--bg0);
+  --color-bg1: var(--bg1);
+  --color-bg2: var(--bg2);
+  --color-bg3: var(--bg3);
+  --color-ink-hi: var(--ink-hi);
+  --color-ink-mid: var(--ink-mid);
+  --color-ink-low: var(--ink-low);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-volt: var(--volt);
+  --color-volt-ink: var(--volt-ink);
+  --color-volt-text: var(--volt-text);
+  --color-good: var(--good);
+  --color-good-bg: var(--good-bg);
+  --color-warn: var(--warn);
+  --color-warn-bg: var(--warn-bg);
+  --color-bad: var(--bad);
+  --color-bad-bg: var(--bad-bg);
+  --color-whatsapp: var(--whatsapp);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+  }
+  ::selection {
+    background: var(--volt);
+    color: var(--volt-ink);
+  }
+}

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Voltra — Logo marks &amp; copy exploration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg0:#0A0C10; --bg1:#10131A; --bg2:#171B24; --bg3:#1F2533;
+    --line:rgba(255,255,255,0.08); --line-strong:rgba(255,255,255,0.14);
+    --ink-hi:#F4F6FA; --ink-mid:#9AA3B2; --ink-low:#5C6472;
+    --accent:#C6FF3E; --accent-ink:#0A0C10; --accent-text:#D8FF78;
+    --good:#2DD4BF; --good-bg:rgba(45,212,191,0.12);
+    --warn:#F59E0B; --warn-bg:rgba(245,158,11,0.12);
+    --bad:#EF4444; --bad-bg:rgba(239,68,68,0.12);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Inter',system-ui,'Segoe UI',sans-serif; background:var(--bg0); color:var(--ink-hi);
+    -webkit-font-smoothing:antialiased;}
+  .page{max-width:1080px; margin:0 auto; padding:36px 22px 100px;}
+
+  header.intro{margin-bottom:34px;}
+  .kicker{font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.14em; color:var(--accent-text);
+    text-transform:uppercase; margin-bottom:10px;}
+  h1{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(24px,3.4vw,34px); letter-spacing:-0.02em;}
+  .intro p{color:var(--ink-mid); font-size:14px; margin-top:10px; max-width:660px; line-height:1.6;}
+
+  h2.section{font-family:'Space Grotesk',sans-serif; font-size:19px; font-weight:600; letter-spacing:-0.01em;
+    margin:44px 0 6px; display:flex; align-items:baseline; gap:12px;}
+  h2.section .n{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--accent-text);}
+  h2.section .sub{font-family:'Inter',sans-serif; font-size:12.5px; font-weight:400; color:var(--ink-low);}
+  hr.secrule{border:none; border-top:1px solid var(--line); margin:14px 0 24px;}
+
+  /* ---------- logos ---------- */
+  .logo-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
+  @media (max-width:860px){ .logo-grid{grid-template-columns:1fr;} }
+  .logo-panel{border:1px solid var(--line); border-radius:14px; background:var(--bg1); overflow:hidden;
+    display:flex; flex-direction:column;}
+  .logo-stage{padding:38px 20px 30px; display:flex; align-items:center; justify-content:center;
+    background:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size:22px 22px, 22px 22px;}
+  .mark-big{width:112px; height:112px; display:flex; align-items:center; justify-content:center; flex:none;}
+  .tile-accent{background:var(--accent); border-radius:24px;}
+  .tile-ink{background:var(--bg0); border:1px solid var(--line-strong); border-radius:24px;}
+  .tile-hairline{border:2px solid var(--ink-hi); border-radius:24px;}
+  .mk-v{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:64px; line-height:1; letter-spacing:-0.05em;}
+  .mk-bolt{width:56px; height:56px;}
+  .mk-bolt.sm{width:30px; height:30px;}
+  .mk-bolt.xs{width:17px; height:17px;}
+
+  .logo-panel .body{padding:18px 18px 16px; border-top:1px solid var(--line);}
+  .lp-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;}
+  .lp-name{font-family:'Space Grotesk',sans-serif; font-size:14.5px; font-weight:600;}
+  .lp-letter{font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--accent-text);}
+  .lockup{display:flex; align-items:center; gap:9px; border:1px dashed var(--line-strong); border-radius:10px;
+    padding:9px 12px; background:var(--bg0); margin-bottom:12px;}
+  .lockup .word{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:16px; letter-spacing:-0.01em;}
+  .variants{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;}
+  .vchip{font-family:'JetBrains Mono',monospace; font-size:9.5px; color:var(--ink-low); border:1px solid var(--line);
+    border-radius:999px; padding:3px 9px;}
+  .notes{font-size:12px; color:var(--ink-mid); line-height:1.6;}
+  .stage-cap{font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.06em; color:var(--ink-low);
+    text-align:center; line-height:1.55; text-transform:uppercase;}
+
+  /* ---------- copy ---------- */
+  .hero-row{border:1px solid var(--line); border-radius:14px; background:var(--bg1); overflow:hidden; margin-bottom:14px;
+    display:flex; align-items:center; gap:18px; padding:18px 20px;}
+  @media (max-width:720px){ .hero-row{flex-direction:column; align-items:flex-start;}}
+  .copy-main{flex:1;}
+  .eyebrow{font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.16em; color:var(--accent-text);
+    text-transform:uppercase; margin-bottom:8px;}
+  .h1-demo{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(20px,2.6vw,27px);
+    letter-spacing:-0.02em; margin-bottom:6px;}
+  .sub-demo{color:var(--ink-mid); font-size:13.5px; line-height:1.55; max-width:520px;}
+  .pick{flex:none; font-family:'JetBrains Mono',monospace; font-size:9.5px; font-weight:600; letter-spacing:.12em;
+    color:var(--accent-ink); background:var(--accent); border-radius:999px; padding:4px 10px;}
+  .alt-tag{flex:none; font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.12em;
+    color:var(--ink-low); border:1px solid var(--line-strong); border-radius:999px; padding:4px 10px;}
+
+  .b2b-band{border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:0 14px 14px 0;
+    background:var(--bg1); padding:18px 22px; margin:16px 0;}
+  .b2b-band .eyebrow{margin-bottom:6px;}
+  .b2b-band .h1-demo{font-size:clamp(17px,2vw,21px); margin-bottom:6px;}
+  .b2b-band .sub-demo{font-size:13px;}
+
+  .microlist{border:1px solid var(--line); border-radius:14px; background:var(--bg1); overflow:hidden;}
+  .mrow{display:flex; align-items:flex-start; gap:16px; padding:13px 20px; border-bottom:1px solid var(--line);
+    font-size:13px;}
+  .mrow:last-child{border-bottom:none;}
+  .mrow .ctx{flex:0 0 190px; font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:.08em;
+    color:var(--ink-low); text-transform:uppercase; padding-top:2px;}
+  @media (max-width:720px){ .mrow{flex-direction:column; gap:6px;} .mrow .ctx{flex:none;}}
+  .mrow .sample{line-height:1.55;}
+  .mrow .sample .mono{font-family:'JetBrains Mono',monospace; font-size:12px;}
+  .mrow .sample .p{display:block; margin:2px 0;}
+  .mrow .alt{color:var(--ink-low);}
+  .mrow .alt::before{content:"· "; color:var(--accent-text);}
+  .pill{font-family:'JetBrains Mono',monospace; font-size:9.5px; font-weight:600; padding:3px 9px; border-radius:999px;}
+  .pill.good{color:var(--good); background:var(--good-bg);}
+  .pill.warn{color:var(--warn); background:var(--warn-bg);}
+  .pill.bad{color:var(--bad); background:var(--bad-bg);}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="intro">
+    <div class="kicker">Voltra · brand exploration · Volt Dark / volt-lime</div>
+    <h1>Logo marks &amp; copy</h1>
+    <p>Three mark options in their native habitat (big stage + header lockup + favicon), then headline and microcopy
+    options renderedthe way they’d actually appear. <b>Mark D is locked</b> — execution 1, straight edges, two-tone (PLAN.md §8).
+    Everything else here is pick-and-choose.</p>
+  </header>
+
+  <!-- ================= LOGO MARKS ================= -->
+  <h2 class="section"><span class="n">01</span> Logo marks <span class="sub">— A flat “V” · B bolt · C bolt-in-square · D &amp; E V-bolt sketches</span></h2>
+  <hr class="secrule">
+
+  <div class="logo-grid">
+
+    <!-- A: Flat V -->
+    <div class="logo-panel">
+      <div class="logo-stage">
+        <div class="mark-big tile-hairline"><span class="mk-v">V</span></div>
+      </div>
+      <div class="body">
+        <div class="lp-head"><span class="lp-name">A — Flat “V”</span><span class="lp-letter">MARK A</span></div>
+        <div class="lockup">
+          <div class="mk-bolt sm" style="visibility:hidden;"></div>
+          <span style="font-family:'Space Grotesk';font-weight:700;font-size:16px;">V</span>
+          <span class="word">Voltra</span>
+        </div>
+        <div class="variants">
+          <span class="vchip">ink-hi outline tile</span>
+          <span class="vchip">accent fill tile</span>
+          <span class="vchip">bare glyph, no tile</span>
+        </div>
+        <p class="notes">Typographic, quiet, editorial. Wears Space Grotesk’s techy cut. Safest long-term, but carries
+        zero voltage cue — reads fashion-house more than electronics. Strong as a secondary/wordmark detail.</p>
+      </div>
+    </div>
+
+    <!-- B: Bolt -->
+    <div class="logo-panel">
+      <div class="logo-stage">
+        <div class="mark-big"><svg class="mk-bolt" viewBox="0 0 24 24" fill="var(--accent)"><path d="M13.5 2 4 13.5h5.4L8 22l9.5-11.5h-5.4L13.5 2Z"/></svg></div>
+      </div>
+      <div class="body">
+        <div class="lp-head"><span class="lp-name">B — Bolt</span><span class="lp-letter">MARK B</span></div>
+        <div class="lockup">
+          <svg class="mk-bolt sm" viewBox="0 0 24 24" fill="var(--accent)"><path d="M13.5 2 4 13.5h5.4L8 22l9.5-11.5h-5.4L13.5 2Z"/></svg>
+          <span class="word">Voltra</span>
+        </div>
+        <div class="variants">
+          <span class="vchip">accent glyph on ink</span>
+          <span class="vchip">ink-hi glyph on dark</span>
+          <span class="vchip">favicon 16px — loses shape</span>
+        </div>
+        <p class="notes">The voltage idea, bare. Iconic at large size and cheap to render, but the silhouette thins out
+        at favicon scale and the plain bolt is a crowded visual space (energy brands everywhere).</p>
+      </div>
+    </div>
+
+    <!-- C: Bolt-in-square -->
+    <div class="logo-panel">
+      <div class="logo-stage">
+        <div class="mark-big tile-accent"><svg class="mk-bolt" viewBox="0 0 24 24" fill="var(--accent-ink)"><path d="M13.5 2 4 13.5h5.4L8 22l9.5-11.5h-5.4L13.5 2Z"/></svg></div>
+      </div>
+      <div class="body">
+        <div class="lp-head"><span class="lp-name">C — Bolt-in-square</span><span class="lp-letter">MARK C · FAVICON FALLBACK</span></div>
+        <div class="lockup">
+          <div class="tile-accent" style="width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;">
+            <svg class="mk-bolt xs" viewBox="0 0 24 24" fill="var(--accent-ink)"><path d="M13.5 2 4 13.5h5.4L8 22l9.5-11.5h-5.4L13.5 2Z"/></svg>
+          </div>
+          <span class="word">Voltra</span>
+        </div>
+        <div class="variants">
+          <span class="vchip">accent tile / ink bolt</span>
+          <span class="vchip">ink tile / accent bolt</span>
+          <span class="vchip">hairline tile / ink bolt</span>
+          <span class="vchip">favicon 16px — holds shape</span>
+        </div>
+        <p class="notes">Bolt + container. Keeps a defined silhouette at every size, gives volt-lime a home, echoes the
+        product-tile language of the store, and reads “app / product brand” — closest match for a modern commerce site.</p>
+      </div>
+    </div>
+
+    <!-- D: V-leg bolt -->
+    <div class="logo-panel">
+      <div class="logo-stage" style="gap:14px; align-items:flex-end;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+          <div class="mark-big">
+            <svg viewBox="0 0 24 24" style="width:76px;height:76px;">
+              <path d="M5.2 3.6 L12 19.6" stroke="var(--ink-hi)" stroke-width="2.6" fill="none"/>
+              <path d="M12 19.6 L15.4 12.6 L13.9 12.6 L18.9 3.6" stroke="var(--accent)" stroke-width="2.6" fill="none" stroke-linejoin="miter"/>
+            </svg>
+          </div>
+          <span class="stage-cap">1 · Straight ★ LOCKED<br>butt caps · miter join<br>single notch</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+          <div class="mark-big">
+            <svg viewBox="0 0 24 24" style="width:76px;height:76px;">
+              <path d="M5.2 3.6 L12 19.6" stroke="var(--ink-hi)" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+              <path d="M12 19.6 L15.3 13 L13.1 13 L17.1 7.6 L16 7.6 L19.4 3.6" stroke="var(--accent)" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span class="stage-cap">2 · Round<br>round caps + joins<br>two notches</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+          <div class="mark-big">
+            <svg viewBox="0 0 24 24" style="width:76px;height:76px;">
+              <path d="M4.6 3.6 L10 19.4 L13.6 19.4 L16.6 12.9 L15.1 12.9 L20 3.6" stroke="var(--accent)" stroke-width="2.6" fill="none" stroke-linejoin="miter"/>
+            </svg>
+          </div>
+          <span class="stage-cap">3 · Squared · NEW<br>flat apex · square caps<br>single sharp notch</span>
+        </div>
+      </div>
+      <div class="body">
+        <div class="lp-head"><span class="lp-name">D — V-leg bolt</span><span class="lp-letter">MARK D · LOCKED</span></div>
+        <div class="lockup">
+          <svg viewBox="0 0 24 24" style="width:30px;height:30px;flex:none;">
+            <path d="M5.2 3.6 L12 19.6" stroke="var(--ink-hi)" stroke-width="2.6" fill="none"/>
+            <path d="M12 19.6 L15.4 12.6 L13.9 12.6 L18.9 3.6" stroke="var(--accent)" stroke-width="2.6" fill="none" stroke-linejoin="miter"/>
+          </svg>
+          <span class="word">Voltra</span>
+        </div>
+        <div class="variants">
+          <span class="vchip">1 &amp; 2 are two-tone: left ink / live lime</span>
+          <span class="vchip">3 is mono accent — one continuous stroke</span>
+          <span class="vchip">any variant can render all-ink or all-lime</span>
+        </div>
+        <p class="notes">“V-leg bolt” — one straight leg (the reliable line) and one live leg (the current). V and bolt
+        resolve into a single glyph: reads V at a glance, bolt at a second glance. Two-tone version tells the brand story
+        on its own. Asymmetric, so it shines large — in the header and hero rather than at favicon size.<br><br>
+        Winner: <b>1 · straight</b> — butt caps, miter join, one notch, two-tone (ink left leg / lime live leg) — locked
+        in PLAN.md §8 and shown in the lockup above. Executions 2 (round) and 3 (squared) are kept as alternates here for
+        future reference.</p>
+      </div>
+    </div>
+
+    <!-- E: Twin-strike V -->
+    <div class="logo-panel">
+      <div class="logo-stage">
+        <div class="mark-big">
+          <svg viewBox="0 0 24 24" style="width:96px;height:96px;">
+            <path d="M12 19.6 L9.1 12.6 L10.4 12.6 L6.2 3.6" stroke="var(--accent)" stroke-width="2.5" fill="none" stroke-linejoin="miter"/>
+            <path d="M12 19.6 L14.9 12.6 L13.6 12.6 L17.8 3.6" stroke="var(--accent)" stroke-width="2.5" fill="none" stroke-linejoin="miter"/>
+          </svg>
+        </div>
+      </div>
+      <div class="body">
+        <div class="lp-head"><span class="lp-name">E — Twin-strike V</span><span class="lp-letter">MARK E · NEW</span></div>
+        <div class="lockup">
+          <svg viewBox="0 0 24 24" style="width:30px;height:30px;flex:none;">
+            <path d="M12 19.6 L9.1 12.6 L10.4 12.6 L6.2 3.6" stroke="var(--accent)" stroke-width="2.5" fill="none" stroke-linejoin="miter"/>
+            <path d="M12 19.6 L14.9 12.6 L13.6 12.6 L17.8 3.6" stroke="var(--accent)" stroke-width="2.5" fill="none" stroke-linejoin="miter"/>
+          </svg>
+          <span class="word">Voltra</span>
+        </div>
+        <div class="variants">
+          <span class="vchip">both legs accent</span>
+          <span class="vchip">both legs ink-hi</span>
+          <span class="vchip">legs ink-hi + accent apex bolt tail</span>
+        </div>
+        <p class="notes">“Twin-strike V” — the bolt’s notch on both legs, perfectly symmetric. Reads V instantly, and
+        the doubled zigzag reads voltage / energy / two-phase power. The most geometric and ownable silhouette in the
+        family; the notches stay readable at small sizes better than D, though it’s still a glyph mark, not a tile.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= COPY ================= -->
+  <h2 class="section"><span class="n">02</span> Landing hero <span class="sub">— job: “what is this?” + “is this for me?” in 3 seconds</span></h2>
+  <hr class="secrule">
+
+  <div class="hero-row">
+    <div class="copy-main">
+      <div class="eyebrow">Voltra · power banks · earbuds · chargers</div>
+      <div class="h1-demo">Always on. Never out.</div>
+      <div class="sub-demo">Electronics that show up when you need them — direct-sourced, fair-priced, and stocked
+      deep enough that “out of stock” is somebody else’s problem.</div>
+    </div>
+    <span class="pick">REC</span>
+  </div>
+
+  <div class="hero-row">
+    <div class="copy-main">
+      <div class="eyebrow">Voltra · gadgets with current</div>
+      <div class="h1-demo">Stay powered.</div>
+      <div class="sub-demo">Power banks, earbuds and chargers built for real life — priced straight, never out when
+      you need them.</div>
+    </div>
+    <span class="alt-tag">OPTION</span>
+  </div>
+
+  <div class="hero-row">
+    <div class="copy-main">
+      <div class="eyebrow">Voltra · voltage you can count on</div>
+      <div class="h1-demo">Voltage you can count on.</div>
+      <div class="sub-demo">Reliable gadgets at honest prices — for you, and wholesale for your shop.</div>
+    </div>
+    <span class="alt-tag">OPTION</span>
+  </div>
+
+  <div class="hero-row">
+    <div class="copy-main">
+      <div class="eyebrow">Voltra · kit that keeps up</div>
+      <div class="h1-demo">Gadgets with current.</div>
+      <div class="sub-demo">Kit that keeps up with you, and stock that keeps up with demand.</div>
+    </div>
+    <span class="alt-tag">OPTION</span>
+  </div>
+
+  <!-- B2B band -->
+  <div class="b2b-band">
+    <div class="eyebrow">For retailers · wholesale · trade credit · restock plans</div>
+    <div class="h1-demo">Stock your shop without the guesswork.</div>
+    <div class="sub-demo">Wholesale pricing from 10 units, trade credit on account, and restock plans that watch your
+    stock so you never hear “it ran out” from a customer first.</div>
+  </div>
+
+  <h2 class="section"><span class="n">03</span> Microcopy <span class="sub">— product, cart, trust, empty states</span></h2>
+  <hr class="secrule">
+
+  <div class="microlist">
+    <div class="mrow">
+      <div class="ctx">Trust bar (home)</div>
+      <div class="sample">
+        <span class="p">Sourced direct — no middleman markup</span>
+        <span class="p">Priced fair — what it costs, plus honest margin</span>
+        <span class="p">Stock you can see — live counts, honest pills</span>
+        <span class="alt">“Direct-sourced · Fair-priced · Never out”</span>
+      </div>
+    </div>
+    <div class="mrow">
+      <div class="ctx">Product card · price line</div>
+      <div class="sample"><span class="mono">₦26,500</span>
+        <span class="alt">wholesale ₦22,000 from 10 units</span></div>
+    </div>
+    <div class="mrow">
+      <div class="ctx">Stock pills</div>
+      <div class="sample">
+        <span class="pill good">IN STOCK · 220</span>&nbsp;
+        <span class="pill warn">LOW · 84 — next restock Tue</span>&nbsp;
+        <span class="pill bad">REORDER SOON · 12</span>
+      </div>
+    </div>
+    <div class="mrow">
+      <div class="ctx">Product detail · actions</div>
+      <div class="sample">
+        <span class="p">Add to cart&nbsp; ·&nbsp; <span class="mono">Notify me when restocked</span></span>
+        <span class="p alt">section labels: “Tech specs” · “What’s in the box” · “Stock &amp; delivery”</span>
+      </div>
+    </div>
+    <div class="mrow">
+      <div class="ctx">Cart / toast</div>
+      <div class="sample"><span class="mono">✓ Added — ₦26,500 · Voltra 20,000mAh Power Bank</span>
+        <span class="alt">cart line mode: “wholesale · steps of 10”</span></div>
+    </div>
+    <div class="mrow">
+      <div class="ctx">Empty states</div>
+      <div class="sample">
+        <span class="p">No matches for “xyz”. Try another search — or browse the aisles.</span>
+        <span class="p alt">Cart: “Your cart is empty. Power up from the shop.”</span>
+      </div>
+    </div>
+    <div class="mrow">
+      <div class="ctx">Retailer chrome</div>
+      <div class="sample">
+        <span class="p">“Outstanding balance · due in 6 days” · “Check-in day” · “Products to track” · “Sample data for prototype”</span>
+      </div>
+    </div>
+  </div>
+
+  <p style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--ink-low);margin-top:22px;line-height:1.8;">
+  Everything above is copy-paste-ready. Pick a mark A–E and headline 1–4 + B2B line, and I’ll fold the winners into
+  PLAN.md with the rest of the microcopy as the UI copy source of truth.
+  </p>
+</div>
+</body>
+</html>

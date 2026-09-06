@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Voltra — Reliable gadgets, reliably stocked</title>
+<style>
+  :root{
+    --ink:#10131A; --ink-soft:#1B1E24; --cobalt:#3556F0; --copper:#E8935A;
+    --paper:#F5F2EC; --paper-dim:#EAE5DA; --slate:#6B7280; --line:rgba(16,19,26,0.10);
+    --green:#22C55E; --green-bg:#DCFCE7; --green-text:#166534;
+    --amber:#F59E0B; --amber-bg:#FEF3C7; --amber-text:#92400E;
+    --red:#EF4444; --red-bg:#FEE2E2; --red-text:#991B1B;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{ font-family:-apple-system, 'Segoe UI', Arial, sans-serif; background:var(--paper); color:var(--ink-soft); }
+  button{ font-family:inherit; cursor:pointer; }
+  input, select{ font-family:inherit; }
+  .mono{ font-family:'Courier New', monospace; }
+
+  header{ position:sticky; top:0; z-index:50; background:rgba(245,242,236,0.92); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); }
+  .nav-inner{ max-width:1180px; margin:0 auto; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; }
+  .logo{ display:flex; align-items:center; gap:10px; font-weight:700; font-size:19px; }
+  .logo .mark{ width:26px; height:26px; border-radius:7px; background:linear-gradient(135deg,var(--cobalt),var(--copper)); display:flex; align-items:center; justify-content:center; color:#fff; font-size:13px; font-weight:800; }
+  .icon-btn{ width:38px; height:38px; border-radius:50%; border:1.5px solid var(--line); background:#fff; display:flex; align-items:center; justify-content:center; position:relative; font-size:16px; }
+  .header-actions{ display:flex; gap:10px; }
+  .cart-badge{ position:absolute; top:-4px; right:-4px; background:var(--copper); color:#fff; font-size:10px; font-weight:700; border-radius:50%; width:17px; height:17px; display:none; align-items:center; justify-content:center; }
+
+  main{ max-width:1180px; margin:0 auto; padding:32px 20px 90px; }
+  .hero-text{ text-align:center; margin-bottom:28px; }
+  .hero-text h1{ font-size:clamp(1.4rem,4vw,1.9rem); margin-bottom:8px; font-weight:700; letter-spacing:-0.02em; }
+  .hero-text p{ color:var(--slate); font-size:14px; margin-bottom:20px; }
+
+  .toggle{ display:inline-flex; background:var(--paper-dim); border-radius:999px; padding:5px; }
+  .toggle button{ padding:9px 16px; border-radius:999px; font-weight:600; font-size:12.5px; border:none; background:transparent; color:var(--slate); }
+  .toggle button.active{ background:var(--ink); color:var(--paper); }
+
+  .search-wrap{ max-width:420px; margin:0 auto 20px; position:relative; }
+  .search-wrap input{ width:100%; padding:11px 14px 11px 38px; border-radius:999px; border:1.5px solid var(--line); font-size:13px; background:#fff; }
+  .search-icon{ position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:14px; color:var(--slate); }
+
+  .cat-row{ display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:26px; }
+  .cat-btn{ padding:8px 14px; border-radius:999px; font-size:12px; font-weight:500; border:1.5px solid var(--line); background:#fff; color:var(--slate); }
+  .cat-btn.active{ border-color:var(--cobalt); background:rgba(53,86,240,0.08); color:var(--cobalt); }
+
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(210px,1fr)); gap:16px; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px; }
+  .thumb{ height:110px; border-radius:10px; margin-bottom:12px; background:linear-gradient(135deg,var(--paper-dim),#fff); display:flex; align-items:center; justify-content:center; font-size:38px; }
+  .p-name{ font-weight:600; font-size:13.5px; margin-bottom:4px; }
+  .p-meta{ font-size:11.5px; color:var(--slate); margin-bottom:10px; }
+  .p-foot{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+  .p-price{ font-weight:700; font-size:14px; }
+  .stock-pill{ font-size:9.5px; color:#166534; background:#DCFCE7; padding:3px 7px; border-radius:999px; }
+  .add-btn{ width:100%; padding:9px; border-radius:9px; background:var(--paper-dim); font-weight:600; font-size:12px; border:none; }
+
+  .subnav{ display:flex; gap:8px; justify-content:center; margin-bottom:24px; flex-wrap:wrap; }
+  .subnav button{ padding:9px 16px; border-radius:999px; font-weight:600; font-size:12.5px; border:none; background:transparent; color:var(--slate); }
+  .subnav button.active{ background:var(--ink); color:var(--paper); }
+
+  .stat-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px; margin-bottom:24px; }
+  .stat-card{ border-radius:14px; padding:18px; }
+  .stat-card.dark{ background:var(--ink); }
+  .stat-card.light{ background:#fff; border:1px solid var(--line); }
+  .stat-label{ font-size:11px; margin-bottom:6px; }
+  .stat-card.dark .stat-label{ color:rgba(245,242,236,0.6); }
+  .stat-card.light .stat-label{ color:var(--slate); }
+  .stat-value{ font-size:22px; font-weight:700; }
+  .stat-card.dark .stat-value{ color:var(--paper); }
+  .stat-sub{ font-size:10.5px; margin-top:4px; color:rgba(245,242,236,0.5); }
+
+  .panel-title{ font-size:16px; font-weight:700; margin-bottom:12px; }
+  .list-card{ background:#fff; border:1px solid var(--line); border-radius:14px; overflow:hidden; margin-bottom:24px; }
+  .list-row{ display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid var(--line); flex-wrap:wrap; gap:6px; }
+  .list-row:last-child{ border-bottom:none; }
+  .dot{ width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:9px; }
+  .health-pill{ font-size:10.5px; padding:4px 9px; border-radius:999px; }
+
+  .center-card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:22px; max-width:640px; margin:0 auto 20px; }
+  .r-row{ display:flex; align-items:center; justify-content:space-between; padding:9px 12px; background:var(--paper-dim); border-radius:10px; margin-bottom:9px; }
+  .r-row .name{ font-size:12.5px; font-weight:600; }
+  .r-row .price{ font-size:10.5px; color:var(--slate); }
+  .add10-btn{ padding:7px 12px; border-radius:8px; background:var(--ink); color:var(--paper); font-size:11px; font-weight:600; border:none; }
+
+  label.field-label{ font-size:11px; font-weight:600; color:var(--slate); display:block; margin-bottom:6px; }
+  input.field, select.field{ width:100%; padding:10px 12px; border-radius:8px; border:1px solid var(--line); margin-bottom:14px; font-size:13px; }
+  .sku-chip{ padding:6px 11px; border-radius:999px; font-size:11px; border:1.5px solid var(--line); background:#fff; color:var(--slate); margin:3px 3px 3px 0; display:inline-block; }
+  .sku-chip.active{ border-color:var(--cobalt); background:rgba(53,86,240,0.08); color:var(--cobalt); }
+  .save-btn{ width:100%; padding:12px; border-radius:9px; background:var(--ink); color:#fff; font-weight:600; font-size:13px; border:none; margin-top:4px; }
+
+  .overlay{ position:fixed; inset:0; background:rgba(16,19,26,0.45); z-index:100; display:none; }
+  .overlay.open{ display:block; }
+  .drawer{ position:fixed; top:0; right:0; bottom:0; width:min(380px,100vw); background:var(--paper); z-index:101; display:none; flex-direction:column; box-shadow:-20px 0 50px rgba(0,0,0,0.15); }
+  .drawer.open{ display:flex; }
+  .drawer-head{ padding:18px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; }
+  .drawer-body{ flex:1; overflow-y:auto; padding:18px; }
+  .drawer-foot{ padding:18px; border-top:1px solid var(--line); }
+  .cart-item{ display:flex; gap:12px; margin-bottom:16px; padding-bottom:16px; border-bottom:1px solid var(--line); }
+  .qty-btn{ width:23px; height:23px; border-radius:6px; border:1px solid var(--line); background:#fff; display:inline-flex; align-items:center; justify-content:center; font-weight:700; }
+  .empty-state{ color:var(--slate); font-size:13px; text-align:center; margin-top:40px; }
+  .checkout-btn{ width:100%; padding:13px; border-radius:9px; background:var(--ink); color:var(--paper); font-weight:600; font-size:13px; border:none; }
+  .close-x{ border:none; background:none; font-size:20px; line-height:1; }
+
+  .modal{ position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index:151; background:#fff; border-radius:18px; padding:28px; width:min(460px,90vw); max-height:85vh; overflow-y:auto; display:none; }
+  .modal.open{ display:block; }
+
+  .toggle-switch{ width:42px; height:24px; border-radius:999px; border:none; position:relative; background:var(--line); }
+  .toggle-switch.on{ background:var(--cobalt); }
+  .toggle-switch .knob{ position:absolute; top:3px; left:3px; width:18px; height:18px; border-radius:50%; background:#fff; transition:left .2s; }
+  .toggle-switch.on .knob{ left:21px; }
+  .settings-row{ display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid var(--line); }
+  .settings-section-label{ font-size:11px; font-weight:600; color:var(--slate); margin:20px 0 10px; }
+  .settings-item{ padding:11px 14px; background:#fff; border:1px solid var(--line); border-radius:10px; margin-bottom:8px; font-size:13px; }
+
+  .fab{ position:fixed; bottom:22px; right:22px; width:52px; height:52px; border-radius:50%; background:#25D366; border:none; box-shadow:0 10px 24px rgba(37,211,102,0.4); display:flex; align-items:center; justify-content:center; font-size:24px; z-index:60; }
+
+  .toast{ position:fixed; top:20px; left:50%; transform:translateX(-50%) translateY(-80px); z-index:300; background:var(--ink); color:var(--paper); padding:11px 20px; border-radius:999px; font-size:13.5px; font-weight:500; transition:transform .25s ease; }
+  .toast.show{ transform:translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-inner">
+    <div class="logo"><span class="mark">V</span>Voltra</div>
+    <div class="header-actions">
+      <button class="icon-btn" id="settingsBtn" title="Settings">⚙️</button>
+      <button class="icon-btn" id="cartBtn" title="Cart">🛒<span class="cart-badge" id="cartBadge">0</span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="hero-text">
+    <h1>Reliable gadgets, reliably stocked.</h1>
+    <p>Sourced direct, priced fair, never out when you need it.</p>
+    <div class="toggle">
+      <button id="btnShop" class="active">🧍 Shopping for myself</button>
+      <button id="btnRetail">🏬 I run a shop</button>
+    </div>
+  </div>
+
+  <div id="shopPanel">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input id="searchInput" placeholder="Search power banks, earbuds, cables...">
+    </div>
+    <div class="cat-row" id="catRow"></div>
+    <div class="grid" id="productGrid"></div>
+  </div>
+
+  <div id="retailPanel" style="display:none;">
+    <div class="subnav">
+      <button id="tabDashboard" class="active">📊 Dashboard</button>
+      <button id="tabBulk">📦 Bulk Order</button>
+      <button id="tabRestock">🔔 Restock Plan</button>
+    </div>
+
+    <div id="dashboardTab">
+      <div class="stat-grid">
+        <div class="stat-card dark">
+          <div class="stat-label">OUTSTANDING BALANCE</div>
+          <div class="stat-value">₦48,000</div>
+          <div class="stat-sub">Due in 6 days</div>
+        </div>
+        <div class="stat-card light">
+          <div class="stat-label">ORDERS THIS MONTH</div>
+          <div class="stat-value">3</div>
+        </div>
+        <div class="stat-card light">
+          <div class="stat-label">TOTAL SPENT (90 DAYS)</div>
+          <div class="stat-value">₦1,048,000</div>
+        </div>
+      </div>
+      <div class="panel-title">Stock health — your tracked products</div>
+      <div class="list-card" id="stockHealthList"></div>
+      <div class="panel-title">Recent orders</div>
+      <div class="list-card" id="ordersList"></div>
+      <p style="font-size:10.5px; color:var(--slate); font-style:italic;">Dashboard figures are illustrative sample data for this prototype.</p>
+    </div>
+
+    <div id="bulkTab" style="display:none;">
+      <div class="center-card">
+        <div class="panel-title">Bulk pricing by product</div>
+        <p style="color:var(--slate); font-size:13px; margin-bottom:16px;">Minimum order of 10 units per SKU. Prices shown are wholesale.</p>
+        <div id="wholesaleList"></div>
+      </div>
+    </div>
+
+    <div id="restockTab" style="display:none;">
+      <div class="center-card">
+        <div class="panel-title">Set up an auto-restock plan</div>
+        <p style="color:var(--slate); font-size:13px; margin-bottom:16px;">We'll check your stock and remind you before you run out.</p>
+        <label class="field-label">SHOP NAME</label>
+        <input class="field" id="shopNameInput" placeholder="e.g. Emeka Electronics">
+        <label class="field-label">PREFERRED CHECK-IN DAY</label>
+        <select class="field" id="dayInput">
+          <option>Monday</option><option selected>Tuesday</option><option>Wednesday</option>
+          <option>Thursday</option><option>Friday</option><option>Saturday</option>
+        </select>
+        <label class="field-label">PRODUCTS TO TRACK</label>
+        <div id="skuChips" style="margin-bottom:14px;"></div>
+        <button class="save-btn" id="saveRestockBtn">Save restock plan</button>
+        <div id="savedPlans" style="display:none; margin-top:16px; padding-top:14px; border-top:1px solid var(--line);">
+          <div style="font-size:10.5px; font-weight:600; color:var(--slate); margin-bottom:8px;" id="savedPlansTitle">YOUR SAVED PLANS</div>
+          <div id="savedPlansList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<button class="fab" id="whatsappBtn" title="Chat on WhatsApp">💬</button>
+
+<div class="overlay" id="cartOverlay"></div>
+<div class="drawer" id="cartDrawer">
+  <div class="drawer-head"><h3>Your cart</h3><button class="close-x" id="closeCartBtn">✕</button></div>
+  <div class="drawer-body" id="cartBody"></div>
+  <div class="drawer-foot" id="cartFoot" style="display:none;">
+    <div style="display:flex; justify-content:space-between; margin-bottom:12px; font-weight:700;"><span>Total</span><span id="cartTotalDisplay" class="mono">₦0</span></div>
+    <button class="checkout-btn">Checkout (prototype — not live)</button>
+  </div>
+</div>
+
+<div class="overlay" id="settingsOverlay"></div>
+<div class="drawer" id="settingsDrawer">
+  <div class="drawer-head"><h3>Settings</h3><button class="close-x" id="closeSettingsBtn">✕</button></div>
+  <div class="drawer-body">
+    <div class="settings-section-label">RESTOCK &amp; ORDER NOTIFICATIONS</div>
+    <div class="settings-row"><span>WhatsApp</span><button class="toggle-switch on" data-pref="whatsapp"><span class="knob"></span></button></div>
+    <div class="settings-row"><span>SMS</span><button class="toggle-switch" data-pref="sms"><span class="knob"></span></button></div>
+    <div class="settings-row"><span>Email</span><button class="toggle-switch on" data-pref="email"><span class="knob"></span></button></div>
+    <div class="settings-section-label">PAYMENT METHODS</div>
+    <div class="settings-item">Paystack</div>
+    <div class="settings-item">Flutterwave</div>
+    <div class="settings-item">Cash / POS on delivery</div>
+    <div class="settings-section-label">ACCOUNT</div>
+    <div class="settings-item" style="color:var(--slate);">Sign-in &amp; account management — not part of this prototype</div>
+  </div>
+</div>
+
+<div class="overlay" id="modalOverlay"></div>
+<div class="modal" id="productModal"></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var PRODUCTS = [
+    { id:'pb-20k', name:'Voltra 20,000mAh Power Bank', category:'Power Banks', meta:'18W fast charge · dual USB-C', desc:'A high-capacity power bank built for all-day reliability. Dual USB-C ports let you charge two devices at once, with 18W fast-charge support cutting typical charge time by nearly half.', price:26500, wholesale:22000, stock:220, emoji:'🔋', specs:['20,000mAh capacity','18W USB-C fast charge','Dual output ports','LED charge display'] },
+    { id:'pb-10k', name:'Voltra 10,000mAh Power Bank', category:'Power Banks', meta:'Slim, pocket-size · single USB-C', desc:'A slim, pocket-friendly power bank for everyday carry — enough charge for a full phone top-up without the bulk of a larger unit.', price:15800, wholesale:12500, stock:180, emoji:'🔋', specs:['10,000mAh capacity','Single USB-C output','Slim 15mm profile','LED charge display'] },
+    { id:'ear-pro', name:'Voltra Earbuds Pro', category:'Earphones', meta:'Active noise cancelling', desc:'Premium wireless earbuds with active noise cancelling, built for commuting through busy streets and markets.', price:18900, wholesale:14500, stock:340, emoji:'🎧', specs:['Active noise cancelling','Bluetooth 5.3','28hr total battery','IPX5 sweat resistant'] },
+    { id:'ear-lite', name:'Voltra Earbuds Lite', category:'Earphones', meta:'Wireless, 20hr battery', desc:'A reliable, budget-friendly wireless earbud for everyday listening — simple pairing, solid battery life.', price:11200, wholesale:8600, stock:260, emoji:'🎧', specs:['Bluetooth 5.1','20hr total battery','Touch controls','IPX4 splash resistant'] },
+    { id:'headset-1', name:'Voltra Over-Ear Headset', category:'Headsets', meta:'Bluetooth 5.3 · built-in mic', desc:'Over-ear comfort with a built-in mic — well suited for calls, remote work, and long listening sessions.', price:24000, wholesale:19000, stock:95, emoji:'🎧', specs:['Bluetooth 5.3','Built-in mic','35hr battery life','Foldable design'] },
+    { id:'cable-3', name:'Fast-Charge Cable Set (3)', category:'Accessories', meta:'USB-C · Lightning · Micro-USB', desc:'One set, every connector — covers USB-C, Lightning, and Micro-USB devices, reinforced at the connector point.', price:7200, wholesale:5400, stock:510, emoji:'🔌', specs:['3 cables included','1.2m length each','Braided, reinforced connectors'] },
+    { id:'adapter-1', name:'65W GaN Fast Charger', category:'Accessories', meta:'Dual-port wall adapter', desc:'Compact GaN fast charger with dual ports — charge a laptop and a phone simultaneously.', price:12500, wholesale:9800, stock:210, emoji:'⚡', specs:['65W total output','Dual-port (USB-C + USB-A)','GaN compact design'] },
+    { id:'case-1', name:'Shockproof Phone Case', category:'Accessories', meta:'Universal fit, 3 sizes', desc:'Everyday drop protection without adding bulk — available in three universal size fits.', price:4500, wholesale:3100, stock:400, emoji:'📱', specs:['Shockproof corners','3 universal sizes','Raised camera lip'] }
+  ];
+  var CATEGORIES = ['All','Power Banks','Earphones','Headsets','Accessories'];
+  var MOCK_ORDERS = [
+    { id:'ORD-1042', date:'Aug 22, 2026', items:'20 × Power Bank, 10 × Earbuds Pro', total:585000, status:'Delivered' },
+    { id:'ORD-1031', date:'Aug 15, 2026', items:'15 × Earbuds Lite, 20 × Cable Set', total:273000, status:'Delivered' },
+    { id:'ORD-1019', date:'Aug 8, 2026', items:'10 × Over-Ear Headset', total:190000, status:'Delivered' }
+  ];
+
+  var byId = {};
+  PRODUCTS.forEach(function(p){ byId[p.id] = p; });
+
+  var state = {
+    cart: {}, restockPlans: [], activeCategory:'All', searchQuery:'', selectedSkus:[]
+  };
+
+  function fmt(n){ return '₦' + n.toLocaleString('en-NG'); }
+  function esc(s){ var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+  function load(){
+    try{ var c = localStorage.getItem('voltra-cart'); if(c) state.cart = JSON.parse(c); }catch(e){}
+    try{ var r = localStorage.getItem('voltra-restock'); if(r) state.restockPlans = JSON.parse(r); }catch(e){}
+  }
+  function saveCart(){ localStorage.setItem('voltra-cart', JSON.stringify(state.cart)); }
+  function saveRestock(){ localStorage.setItem('voltra-restock', JSON.stringify(state.restockPlans)); }
+
+  function showToast(msg){
+    var t = document.getElementById('toast');
+    t.textContent = '✓ ' + msg;
+    t.classList.add('show');
+    setTimeout(function(){ t.classList.remove('show'); }, 1800);
+  }
+
+  function addToCart(id, mode){
+    var p = byId[id]; if(!p) return;
+    var existing = state.cart[id];
+    var qty = (existing ? existing.qty : 0) + (mode === 'retail' ? 10 : 1);
+    state.cart[id] = { id:id, qty:qty, mode:mode };
+    saveCart();
+    renderCartBadgeAndBody();
+    showToast(p.name + ' added to cart');
+  }
+  function updateQty(id, delta){
+    var item = state.cart[id]; if(!item) return;
+    var step = item.mode === 'retail' ? 10 : 1;
+    var newQty = item.qty + delta * step;
+    if(newQty <= 0) delete state.cart[id]; else item.qty = newQty;
+    saveCart(); renderCartBadgeAndBody();
+  }
+  function removeItem(id){ delete state.cart[id]; saveCart(); renderCartBadgeAndBody(); }
+
+  function cartItemsArr(){
+    return Object.keys(state.cart).map(function(id){
+      var entry = state.cart[id]; var p = byId[id];
+      return Object.assign({}, p, entry);
+    });
+  }
+  function cartCount(){ return cartItemsArr().reduce(function(s,i){ return s+i.qty; }, 0); }
+  function cartTotal(){ return cartItemsArr().reduce(function(s,i){ return s + (i.mode==='retail'?i.wholesale:i.price)*i.qty; }, 0); }
+
+  function renderCartBadgeAndBody(){
+    var count = cartCount();
+    var badge = document.getElementById('cartBadge');
+    badge.style.display = count > 0 ? 'flex' : 'none';
+    badge.textContent = count;
+
+    var body = document.getElementById('cartBody');
+    var items = cartItemsArr();
+    if(items.length === 0){
+      body.innerHTML = '<p class="empty-state">Your cart is empty.</p>';
+      document.getElementById('cartFoot').style.display = 'none';
+      return;
+    }
+    var html = '';
+    items.forEach(function(item){
+      var unitPrice = item.mode === 'retail' ? item.wholesale : item.price;
+      html += '<div class="cart-item"><div style="flex:1;">' +
+        '<div style="font-size:12.5px;font-weight:600;">'+esc(item.name)+'</div>' +
+        '<div style="font-size:10.5px;color:var(--slate);margin-bottom:8px;" class="mono">'+fmt(unitPrice)+(item.mode==='retail'?' (wholesale)':'')+'</div>' +
+        '<div style="display:flex;align-items:center;gap:9px;">' +
+        '<button class="qty-btn" data-action="qty-minus" data-id="'+item.id+'">−</button>' +
+        '<span class="mono" style="min-width:22px;text-align:center;">'+item.qty+'</span>' +
+        '<button class="qty-btn" data-action="qty-plus" data-id="'+item.id+'">+</button>' +
+        '<button style="margin-left:auto;border:none;background:none;color:var(--slate);font-size:14px;" data-action="remove" data-id="'+item.id+'">🗑</button>' +
+        '</div></div></div>';
+    });
+    body.innerHTML = html;
+    document.getElementById('cartFoot').style.display = 'block';
+    document.getElementById('cartTotalDisplay').textContent = fmt(cartTotal());
+  }
+
+  function renderCategories(){
+    var row = document.getElementById('catRow');
+    row.innerHTML = CATEGORIES.map(function(c){
+      return '<button class="cat-btn '+(c===state.activeCategory?'active':'')+'" data-cat="'+c+'">'+c+'</button>';
+    }).join('');
+  }
+
+  function filteredProducts(){
+    return PRODUCTS.filter(function(p){
+      var matchCat = state.activeCategory === 'All' || p.category === state.activeCategory;
+      var q = state.searchQuery.toLowerCase();
+      var matchSearch = p.name.toLowerCase().indexOf(q) !== -1 || p.category.toLowerCase().indexOf(q) !== -1;
+      return matchCat && matchSearch;
+    });
+  }
+
+  function renderProducts(){
+    var grid = document.getElementById('productGrid');
+    var list = filteredProducts();
+    if(list.length === 0){
+      grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--slate);font-size:13.5px;">No products match "'+esc(state.searchQuery)+'".</p>';
+      return;
+    }
+    grid.innerHTML = list.map(function(p){
+      return '<div class="card">' +
+        '<div class="thumb" data-action="open-detail" data-id="'+p.id+'" style="cursor:pointer;">'+p.emoji+'</div>' +
+        '<div class="p-name" data-action="open-detail" data-id="'+p.id+'" style="cursor:pointer;">'+esc(p.name)+'</div>' +
+        '<div class="p-meta">'+esc(p.meta)+'</div>' +
+        '<div class="p-foot"><span class="p-price mono">'+fmt(p.price)+'</span><span class="stock-pill">'+p.stock+' in stock</span></div>' +
+        '<button class="add-btn" data-action="add-unit" data-id="'+p.id+'">Add to cart</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function renderWholesaleList(){
+    var el = document.getElementById('wholesaleList');
+    el.innerHTML = PRODUCTS.map(function(p){
+      return '<div class="r-row"><div><div class="name">'+esc(p.name)+'</div><div class="price mono">'+fmt(p.wholesale)+' / unit</div></div>' +
+        '<button class="add10-btn" data-action="add-retail" data-id="'+p.id+'">Add ×10</button></div>';
+    }).join('');
+  }
+
+  function stockHealth(stock){
+    if(stock > 150) return { label:'Healthy', color:'var(--green)', bg:'var(--green-bg)', text:'var(--green-text)' };
+    if(stock > 60) return { label:'Monitor', color:'var(--amber)', bg:'var(--amber-bg)', text:'var(--amber-text)' };
+    return { label:'Reorder soon', color:'var(--red)', bg:'var(--red-bg)', text:'var(--red-text)' };
+  }
+  function renderStockHealth(){
+    var el = document.getElementById('stockHealthList');
+    el.innerHTML = PRODUCTS.map(function(p){
+      var h = stockHealth(p.stock);
+      return '<div class="list-row"><div><span class="dot" style="background:'+h.color+';"></span>'+esc(p.name)+'</div>' +
+        '<div><span class="mono" style="font-size:11.5px;color:var(--slate);margin-right:10px;">'+p.stock+' units</span>' +
+        '<span class="health-pill mono" style="color:'+h.text+';background:'+h.bg+';">'+h.label+'</span></div></div>';
+    }).join('');
+  }
+  function renderOrders(){
+    var el = document.getElementById('ordersList');
+    el.innerHTML = MOCK_ORDERS.map(function(o){
+      return '<div class="list-row"><div><div class="mono" style="font-size:12.5px;font-weight:600;">'+o.id+'</div>' +
+        '<div style="font-size:11.5px;color:var(--slate);">'+esc(o.items)+'</div></div>' +
+        '<div style="text-align:right;"><div style="font-size:12.5px;font-weight:600;">'+fmt(o.total)+'</div>' +
+        '<div style="font-size:10.5px;color:var(--green);">'+o.status+' · '+o.date+'</div></div></div>';
+    }).join('');
+  }
+
+  function renderSkuChips(){
+    var el = document.getElementById('skuChips');
+    el.innerHTML = PRODUCTS.map(function(p){
+      var active = state.selectedSkus.indexOf(p.id) !== -1;
+      return '<span class="sku-chip '+(active?'active':'')+'" data-action="toggle-sku" data-id="'+p.id+'">'+esc(p.name.replace('Voltra ',''))+'</span>';
+    }).join('');
+  }
+  function renderSavedPlans(){
+    var wrap = document.getElementById('savedPlans');
+    var list = document.getElementById('savedPlansList');
+    var title = document.getElementById('savedPlansTitle');
+    if(state.restockPlans.length === 0){ wrap.style.display = 'none'; return; }
+    wrap.style.display = 'block';
+    title.textContent = 'YOUR SAVED PLANS (' + state.restockPlans.length + ')';
+    list.innerHTML = state.restockPlans.map(function(r){
+      return '<div style="font-size:12px;margin-bottom:6px;display:flex;justify-content:space-between;"><span>'+esc(r.shopName)+' — every '+r.day+'</span>' +
+        '<span class="mono" style="color:var(--slate);font-size:10.5px;">'+r.skus.length+' SKUs</span></div>';
+    }).join('');
+  }
+
+  function openDetail(id){
+    var p = byId[id]; if(!p) return;
+    var modal = document.getElementById('productModal');
+    modal.innerHTML =
+      '<button id="closeModalBtn" style="position:absolute;top:18px;right:18px;border:none;background:none;font-size:18px;">✕</button>' +
+      '<div style="height:140px;border-radius:12px;margin-bottom:16px;background:linear-gradient(135deg,var(--paper-dim),#fff);display:flex;align-items:center;justify-content:center;font-size:56px;">'+p.emoji+'</div>' +
+      '<div class="mono" style="font-size:10.5px;color:var(--cobalt);margin-bottom:6px;">'+p.category+'</div>' +
+      '<h2 style="font-size:19px;margin-bottom:10px;">'+esc(p.name)+'</h2>' +
+      '<p style="font-size:13px;color:var(--slate);line-height:1.6;margin-bottom:16px;">'+esc(p.desc)+'</p>' +
+      '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;">' +
+        p.specs.map(function(s){ return '<span style="font-size:11px;background:var(--paper-dim);padding:5px 11px;border-radius:999px;">'+esc(s)+'</span>'; }).join('') +
+      '</div>' +
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">' +
+        '<span class="mono" style="font-weight:700;font-size:19px;">'+fmt(p.price)+'</span>' +
+        '<span class="mono" style="font-size:11px;color:#166534;background:#DCFCE7;padding:4px 10px;border-radius:999px;">'+p.stock+' in stock</span>' +
+      '</div>' +
+      '<button data-action="add-unit" data-id="'+p.id+'" data-close="1" style="width:100%;padding:12px;border-radius:10px;background:var(--ink);color:var(--paper);font-weight:600;font-size:13px;border:none;margin-bottom:10px;">Add to cart</button>' +
+      '<button data-action="notify" data-id="'+p.id+'" style="width:100%;padding:11px;border-radius:10px;background:#fff;color:var(--slate);font-weight:500;font-size:12px;border:1.5px solid var(--line);">🔔 Notify me if this runs low on stock</button>';
+    modal.classList.add('open');
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+  function closeModal(){
+    document.getElementById('productModal').classList.remove('open');
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+
+  function switchAudience(target){
+    document.getElementById('btnShop').classList.toggle('active', target==='shop');
+    document.getElementById('btnRetail').classList.toggle('active', target==='retail');
+    document.getElementById('shopPanel').style.display = target==='shop' ? 'block' : 'none';
+    document.getElementById('retailPanel').style.display = target==='retail' ? 'block' : 'none';
+  }
+  function switchRetailTab(tab){
+    ['dashboard','bulk','restock'].forEach(function(t){
+      document.getElementById('tab'+t.charAt(0).toUpperCase()+t.slice(1)).classList.toggle('active', t===tab);
+      document.getElementById(t+'Tab').style.display = t===tab ? 'block' : 'none';
+    });
+  }
+
+  // ---- Event delegation: one listener on body handles all dynamic clicks ----
+  document.body.addEventListener('click', function(e){
+    var el = e.target.closest('[data-action]');
+    if(!el) return;
+    var action = el.getAttribute('data-action');
+    var id = el.getAttribute('data-id');
+
+    if(action === 'add-unit'){ addToCart(id, 'unit'); if(el.getAttribute('data-close')) closeModal(); }
+    else if(action === 'add-retail'){ addToCart(id, 'retail'); }
+    else if(action === 'qty-plus'){ updateQty(id, 1); }
+    else if(action === 'qty-minus'){ updateQty(id, -1); }
+    else if(action === 'remove'){ removeItem(id); }
+    else if(action === 'open-detail'){ openDetail(id); }
+    else if(action === 'toggle-sku'){
+      var idx = state.selectedSkus.indexOf(id);
+      if(idx === -1) state.selectedSkus.push(id); else state.selectedSkus.splice(idx,1);
+      renderSkuChips();
+    }
+    else if(action === 'notify'){ showToast('You will be notified if stock runs low'); }
+
+    if(el.classList.contains('cat-btn')){ state.activeCategory = el.getAttribute('data-cat'); renderCategories(); renderProducts(); }
+  });
+
+  document.getElementById('btnShop').addEventListener('click', function(){ switchAudience('shop'); });
+  document.getElementById('btnRetail').addEventListener('click', function(){ switchAudience('retail'); });
+  document.getElementById('tabDashboard').addEventListener('click', function(){ switchRetailTab('dashboard'); });
+  document.getElementById('tabBulk').addEventListener('click', function(){ switchRetailTab('bulk'); });
+  document.getElementById('tabRestock').addEventListener('click', function(){ switchRetailTab('restock'); });
+
+  document.getElementById('searchInput').addEventListener('input', function(e){ state.searchQuery = e.target.value; renderProducts(); });
+
+  document.getElementById('cartBtn').addEventListener('click', function(){
+    document.getElementById('cartDrawer').classList.add('open');
+    document.getElementById('cartOverlay').classList.add('open');
+  });
+  function closeCart(){
+    document.getElementById('cartDrawer').classList.remove('open');
+    document.getElementById('cartOverlay').classList.remove('open');
+  }
+  document.getElementById('closeCartBtn').addEventListener('click', closeCart);
+  document.getElementById('cartOverlay').addEventListener('click', closeCart);
+
+  document.getElementById('settingsBtn').addEventListener('click', function(){
+    document.getElementById('settingsDrawer').classList.add('open');
+    document.getElementById('settingsOverlay').classList.add('open');
+  });
+  function closeSettings(){
+    document.getElementById('settingsDrawer').classList.remove('open');
+    document.getElementById('settingsOverlay').classList.remove('open');
+  }
+  document.getElementById('closeSettingsBtn').addEventListener('click', closeSettings);
+  document.getElementById('settingsOverlay').addEventListener('click', closeSettings);
+  document.querySelectorAll('.toggle-switch').forEach(function(btn){
+    btn.addEventListener('click', function(){ btn.classList.toggle('on'); });
+  });
+
+  document.getElementById('modalOverlay').addEventListener('click', closeModal);
+
+  document.getElementById('whatsappBtn').addEventListener('click', function(){
+    showToast('Would open WhatsApp support chat');
+  });
+
+  document.getElementById('saveRestockBtn').addEventListener('click', function(){
+    var shopName = document.getElementById('shopNameInput').value.trim();
+    var day = document.getElementById('dayInput').value;
+    if(!shopName || state.selectedSkus.length === 0){ showToast('Add a shop name and pick a product'); return; }
+    state.restockPlans.push({ id:Date.now(), shopName:shopName, day:day, skus:state.selectedSkus.slice() });
+    saveRestock();
+    document.getElementById('shopNameInput').value = '';
+    state.selectedSkus = [];
+    renderSkuChips();
+    renderSavedPlans();
+    var btn = document.getElementById('saveRestockBtn');
+    btn.textContent = 'Restock plan saved ✓';
+    btn.style.background = '#22C55E';
+    setTimeout(function(){ btn.textContent = 'Save restock plan'; btn.style.background = ''; }, 2200);
+  });
+
+  // Init
+  load();
+  renderCategories();
+  renderProducts();
+  renderWholesaleList();
+  renderStockHealth();
+  renderOrders();
+  renderSkuChips();
+  renderSavedPlans();
+  renderCartBadgeAndBody();
+})();
+</script>
+
+</body>
+</html>
