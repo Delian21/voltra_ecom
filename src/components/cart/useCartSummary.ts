@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { useCart } from "@/lib/store/cart";
 import { useAuth } from "@/lib/store/auth";
-import { getProductSync } from "@/lib/data/catalog";
+import { getProductSync } from "@/lib/data/catalog.shared";
 import type { CartLine, Product } from "@/lib/types";
 
 export interface CartSummaryLine {

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { getProductSync } from "@/lib/data/catalog";
+import { getProductSync } from "@/lib/data/catalog.shared";
 import { PriceTag } from "@/components/product/PriceTag";
 import { StockPill } from "@/components/product/StockPill";
 import { ProductActions } from "@/components/product/ProductActions";

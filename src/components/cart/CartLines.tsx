@@ -5,7 +5,7 @@ import { ArrowRight, Minus, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { useCartSummary } from "@/components/cart/useCartSummary";
 import { useCart } from "@/lib/store/cart";
-import { getAllProductsSync } from "@/lib/data/catalog";
+import { getAllProductsSync } from "@/lib/data/catalog.shared";
 import type { PricingMode, Product } from "@/lib/types";
 import { formatNaira } from "@/components/product/PriceTag";
 import { ProductImage } from "@/components/product/ProductImage";
