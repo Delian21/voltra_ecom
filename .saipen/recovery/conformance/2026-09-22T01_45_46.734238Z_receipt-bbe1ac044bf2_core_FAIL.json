@@ -1,0 +1,17 @@
+{
+  "board_hash": "7e94145f1c16a00b",
+  "content_hash": "8fa01f26777984e8",
+  "exit_code": 1,
+  "gate": "core",
+  "kind": "conformance_receipt",
+  "log_hash": "c774db3b89c11d2e",
+  "project_identity": "c:\\users\\user\\documents\\voltra_ecom",
+  "receipt_id": "receipt-bbe1ac044bf2",
+  "schema_version": 2,
+  "source_head": "67a8e384193d75ca1dadfdcb66edb8406873ae61",
+  "source_tree_fingerprint": "git-delta-v1:6ebdec81adbfdc7e0198626372963e7c28c9953c5fbaa95e56383c078e2e7e15",
+  "state_hash": "752b2335ee0de89b",
+  "timestamp_utc": "2026-09-22T01:45:46.734238Z",
+  "validator_protocol_version": "1",
+  "verdict": "FAIL"
+}
