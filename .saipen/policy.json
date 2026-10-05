@@ -1,0 +1,11 @@
+{
+  "fs.read": "ALLOW",
+  "repo.read": "ALLOW",
+  "process.execute": "ALLOW",
+  "network.read": "ALLOW",
+  "fs.write": "MANUAL",
+  "fs.delete": "MANUAL",
+  "repo.mutate": "MANUAL",
+  "network.write": "MANUAL",
+  "external.mutate": "MANUAL"
+}
