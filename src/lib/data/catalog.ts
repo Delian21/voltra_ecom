@@ -8,7 +8,7 @@
  * Client components must NOT import this file (drizzle/pg leak into browser
  * bundles). They import data/catalog.shared.ts instead.
  */
-import { asc } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 
 import type { Product } from "@/lib/types";
 
@@ -44,9 +44,9 @@ export async function listProducts(): Promise<Product[]> {
     try {
       const rows = await getDb().select().from(products).orderBy(asc(products.displayOrder));
       if (rows.length > 0) return rows.map(rowToProduct);
-    } catch {
+    } catch (err) {
       // DB hiccup — degrade to bundled seed, never crash the page.
-      console.error("[catalog] DB read failed, serving mock fallback");
+      console.error("[catalog] DB read failed, serving mock fallback", err);
     }
   }
   return MOCK_PRODUCTS;
@@ -59,11 +59,15 @@ export async function listCategories(): Promise<string[]> {
 export async function getProduct(slug: string): Promise<Product | undefined> {
   if (dbAvailable()) {
     try {
-      const rows = await getDb().select().from(products);
-      const row = rows.find((r) => r.slug === slug);
+      const rows = await getDb()
+        .select()
+        .from(products)
+        .where(eq(products.slug, slug))
+        .limit(1);
+      const row = rows[0];
       if (row) return rowToProduct(row);
-    } catch {
-      console.error("[catalog] DB read failed, serving mock fallback");
+    } catch (err) {
+      console.error("[catalog] DB read failed, serving mock fallback", err);
     }
   }
   return MOCK_PRODUCTS.find((p) => p.slug === slug);

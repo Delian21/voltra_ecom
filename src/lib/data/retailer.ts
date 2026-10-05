@@ -46,17 +46,3 @@ export async function listRecentOrders(): Promise<Order[]> {
   const mock = [...listMockOrders()];
   return mock.length > 0 ? [...mock, ...SAMPLE_ORDERS] : [...SAMPLE_ORDERS];
 }
-
-/**
- * Optional richer query for surfaces that want to render the buyer field
- * alongside the sample orders. Kept separate so the default retailer data
- * seam stays focused on the current dashboard shape.
- */
-export async function listRecentOrdersWithBuyer(): Promise<
-  Array<Order & { buyer: string | null }>
-> {
-  const mock = [...listMockOrders()];
-  return mock.length > 0
-    ? [...mock, ...SAMPLE_ORDERS.map((o) => ({ ...o, buyer: null }))]
-    : SAMPLE_ORDERS.map((o) => ({ ...o, buyer: null }));
-}

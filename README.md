@@ -17,7 +17,7 @@ Product logic and design spec: [`PLAN.md`](./PLAN.md) is the source of truth; `V
 | Styling | Tailwind CSS 4 + shadcn/ui (copied into `src/components/ui`) |
 | Design | **Volt Dark** — graphite surfaces, volt-lime accent `#C6FF3E`, Space Grotesk / Inter / JetBrains Mono |
 | State | Zustand with `persist` (cart, auth, prefs) |
-| Data | Mock-first: localStorage-backed modules behind async interfaces |
+| Data | Supabase Postgres via Drizzle (server-only), with the bundled seed as fallback |
 | Tests | Playwright (`e2e/voltra.spec.ts`) |
 
 ## Routes
@@ -68,7 +68,7 @@ src/
   hooks/
 ```
 
-**Mock-data seam:** components never touch storage directly — all data access goes through `src/lib/data/*` as async functions. When the backend phase starts, those modules get swapped for fetch-based implementations with the same signatures; no component rewrites.
+**Data seam:** components never touch storage directly — all data access goes through `src/lib/data/*` as async functions. The product catalog and retailer dashboard read Supabase Postgres through Drizzle (server-only, in `src/lib/data/catalog.ts`), falling back to the bundled seed in `src/lib/data/seed.ts` when `DATABASE_URL` is unset or a query fails. Orders, messages and the six Zustand stores remain localStorage-backed prototype modules; when the backend phase reaches them they get swapped for fetch-based implementations with the same signatures, so no component rewrites.
 
 ## Deployment
 

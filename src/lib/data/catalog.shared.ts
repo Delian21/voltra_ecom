@@ -33,7 +33,7 @@ function seedToProduct(s: (typeof SEED_PRODUCTS)[number]): Product {
 export const MOCK_PRODUCTS: Product[] =
   [...SEED_PRODUCTS].sort((a, b) => a.displayOrder - b.displayOrder).map(seedToProduct);
 
-export const CATEGORIES = ["All", "Power Banks", "Earphones", "Headsets", "Accessories"] as const;
+export { CATEGORIES } from "./seed";
 
 /** Synchronous lookup — slug first (page routes), id fallback (cart math). */
 export function getProductSync(slugOrId: string): Product | undefined {
