@@ -21,6 +21,8 @@ export function ProductActions({ product }: { product: Product }) {
   const remove = useCart((s) => s.remove);
   const saveTotal = product.price * 10 - product.wholesale * 10;
   const savePct = savingsPercent(product.price, product.wholesale);
+  const outOfStock = product.stock <= 0;
+  const wholesaleBlocked = product.stock < 10;
 
   return (
     <>
@@ -36,6 +38,7 @@ export function ProductActions({ product }: { product: Product }) {
           <Button
             size="lg"
             className="flex-1"
+            disabled={outOfStock}
             onClick={() => {
               add(product.id, "unit");
               toast(
@@ -52,7 +55,7 @@ export function ProductActions({ product }: { product: Product }) {
               );
             }}
           >
-            Add to cart
+            {outOfStock ? "Out of stock" : "Add to cart"}
           </Button>
         </div>
       </div>
@@ -61,6 +64,7 @@ export function ProductActions({ product }: { product: Product }) {
       <div className="mt-7 hidden sm:flex flex-wrap gap-3">
         <Button
           size="lg"
+          disabled={outOfStock}
           onClick={() => {
             add(product.id, "unit");
             toast(
@@ -77,11 +81,12 @@ export function ProductActions({ product }: { product: Product }) {
             );
           }}
         >
-          Add to cart
+          {outOfStock ? "Out of stock" : "Add to cart"}
         </Button>
         <Button
           size="lg"
           variant="secondary"
+          disabled={wholesaleBlocked}
           onClick={() => {
             add(product.id, "wholesale");
             toast(
@@ -100,6 +105,11 @@ export function ProductActions({ product }: { product: Product }) {
         >
           Add ×10 at wholesale
         </Button>
+        {wholesaleBlocked && (
+          <span className="self-center font-mono text-[10.5px] text-ink-low">
+            Min 10 units for wholesale
+          </span>
+        )}
         <Button
           size="lg"
           variant="ghost"
@@ -134,6 +144,7 @@ export function ProductActions({ product }: { product: Product }) {
           <Button
             size="lg"
             className="flex-shrink-0"
+            disabled={wholesaleBlocked}
             onClick={() => {
               add(product.id, "wholesale");
               toast(
@@ -152,6 +163,11 @@ export function ProductActions({ product }: { product: Product }) {
           >
             Add ×10
           </Button>
+          {wholesaleBlocked && (
+            <span className="font-mono text-[10.5px] text-ink-low">
+              Min 10 units for wholesale
+            </span>
+          )}
         </div>
       </div>
     </>

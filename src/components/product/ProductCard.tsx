@@ -15,6 +15,7 @@ import { formatNaira } from "@/components/product/PriceTag";
 export function ProductCard({ product }: { product: Product }) {
   const [hovered, setHovered] = useState(false);
   const add = useCart((s) => s.add);
+  const outOfStock = product.stock <= 0;
 
   return (
     <div
@@ -74,14 +75,21 @@ export function ProductCard({ product }: { product: Product }) {
           <Button
             size="sm"
             className="mt-3 w-full"
+            disabled={outOfStock}
             onClick={(e) => {
               e.preventDefault();
               add(product.id, "unit");
               toast.success(`Added — ${formatNaira(product.price)} · ${product.name}`);
             }}
           >
-            <Plus className="size-3.5" />
-            <span className="ml-1.5">Quick add</span>
+            {outOfStock ? (
+              "Out of stock"
+            ) : (
+              <>
+                <Plus className="size-3.5" />
+                <span className="ml-1.5">Quick add</span>
+              </>
+            )}
           </Button>
           <button
             type="button"

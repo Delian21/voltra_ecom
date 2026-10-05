@@ -39,17 +39,25 @@ export function BulkCatalog({ products }: { products: Product[] }) {
                 {formatNaira(p.wholesale)} / unit · min 10
               </p>
             </div>
-            <Button
-              size="sm"
-              onClick={() => {
-                add(p.id, "wholesale");
-                toast.success(
-                  `Added ×10 (wholesale) — ${formatNaira(p.wholesale)}/unit · ${p.name}`,
-                );
-              }}
-            >
-              Add ×10
-            </Button>
+            <div className="flex flex-col items-end gap-1">
+              <Button
+                size="sm"
+                disabled={p.stock < 10}
+                onClick={() => {
+                  add(p.id, "wholesale");
+                  toast.success(
+                    `Added ×10 (wholesale) — ${formatNaira(p.wholesale)}/unit · ${p.name}`,
+                  );
+                }}
+              >
+                Add ×10
+              </Button>
+              {p.stock < 10 && (
+                <span className="font-mono text-[10px] text-ink-low">
+                  Min 10 units for wholesale
+                </span>
+              )}
+            </div>
           </li>
         ))}
       </ul>

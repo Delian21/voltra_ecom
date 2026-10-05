@@ -1,17 +1,12 @@
 import { cn } from "@/lib/utils";
-import { stockHealth } from "@/lib/stock-health";
+import { shopperStock, stockHealth, type ShopperStockLevel } from "@/lib/stock-health";
 
-const VARIANTS = {
-  healthy: "bg-good-bg text-good",
+const VARIANTS: Record<ShopperStockLevel, string> = {
+  in: "bg-good-bg text-good",
   low: "bg-warn-bg text-warn",
-  reorder: "bg-bad-bg text-bad",
-} as const;
-
-const LABEL = {
-  healthy: "IN STOCK",
-  low: "LOW",
-  reorder: "REORDER SOON",
-} as const;
+  last: "bg-bad-bg text-bad",
+  out: "bg-bad-bg text-bad",
+};
 
 export function StockPill({
   stock,
@@ -20,16 +15,16 @@ export function StockPill({
   stock: number;
   className?: string;
 }) {
-  const health = stockHealth(stock);
+  const { label, level } = shopperStock(stock);
   return (
     <span
       className={cn(
         "rounded-full px-2 py-0.5 font-mono text-[9px] font-semibold",
-        VARIANTS[health],
+        VARIANTS[level],
         className,
       )}
     >
-      {LABEL[health]} · {stock}
+      {label}
     </span>
   );
 }
