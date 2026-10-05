@@ -3,6 +3,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { useAuth } from "@/lib/store/auth";
+import { getProductSync } from "@/lib/data/catalog.shared";
 import type { CartLine, PricingMode } from "@/lib/types";
 
 /**
@@ -25,6 +26,20 @@ function stepFor(mode: PricingMode): number {
   return mode === "wholesale" ? 10 : 1;
 }
 
+/** Largest qty allowed in a mode: stock floored to the mode's step, or null when the product is unknown. */
+function stockCap(id: string, mode: PricingMode): number | null {
+  const product = getProductSync(id);
+  if (!product) return null;
+  const step = stepFor(mode);
+  return Math.floor(product.stock / step) * step;
+}
+
+/** Clamp a requested qty to the mode's stock cap (no cap when the product is unknown). */
+function capQty(qty: number, id: string, mode: PricingMode): number {
+  const cap = stockCap(id, mode);
+  return cap === null ? qty : Math.min(qty, cap);
+}
+
 /** Scope for writes: account while signed in, guest otherwise. */
 function activeScope(): "guest" | "account" {
   return useAuth.getState().user ? "account" : "guest";
@@ -39,21 +54,22 @@ export const useCart = create<CartState>()(
         set((s) => {
           const scope = activeScope();
           const existing = s[scope][id];
-          const line: CartLine = {
-            id,
-            mode,
-            qty: (existing?.qty ?? 0) + stepFor(mode),
-          };
-          return scope === "account"
-            ? { account: { ...s.account, [id]: line } }
-            : { guest: { ...s.guest, [id]: line } };
+          // Switching mode resets the line — retail qty never carries into wholesale.
+          const base = existing?.mode === mode ? existing.qty : 0;
+          const qty = capQty(base + stepFor(mode), id, mode);
+          const next = { ...s[scope] };
+          if (qty <= 0) delete next[id];
+          else next[id] = { id, mode, qty };
+          return scope === "account" ? { account: next } : { guest: next };
         }),
       updateQty: (id, delta) =>
         set((s) => {
           const scope = activeScope();
           const entry = s[scope][id];
           if (!entry) return s;
-          const qty = entry.qty + delta;
+          // Step by the line's own mode, never by whatever delta the UI sends.
+          const moved = entry.qty + Math.sign(delta) * stepFor(entry.mode);
+          const qty = capQty(moved, id, entry.mode);
           const next = { ...s[scope] };
           if (qty <= 0) delete next[id];
           else next[id] = { ...entry, qty };
@@ -76,9 +92,16 @@ export const useCart = create<CartState>()(
           const merged = { ...s.account };
           for (const [id, line] of Object.entries(s.guest)) {
             const existing = merged[id];
-            merged[id] = existing
-              ? { ...existing, qty: existing.qty + line.qty }
-              : line;
+            if (!existing) {
+              const qty = capQty(line.qty, id, line.mode);
+              if (qty > 0) merged[id] = { ...line, qty };
+              continue;
+            }
+            // A mode conflict keeps the account line and drops the guest line.
+            if (existing.mode !== line.mode) continue;
+            const qty = capQty(existing.qty + line.qty, id, existing.mode);
+            if (qty > 0) merged[id] = { ...existing, qty };
+            else delete merged[id];
           }
           return { account: merged, guest: {} };
         }),
