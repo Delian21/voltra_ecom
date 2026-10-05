@@ -19,7 +19,7 @@ const SAMPLE_ORDERS: ReadonlyArray<Order> = [
     id: "ORD-1031",
     date: "Aug 15, 2026",
     items: "15 × Earbuds Lite, 20 × Cable Set",
-    total: 273000,
+    total: 237000,
     status: "Delivered",
     buyer: null,
   },
@@ -38,7 +38,7 @@ export async function getRetailerAccount(): Promise<RetailerAccount> {
     balance: 48000,
     balanceDueDays: 6,
     ordersThisMonth: 3,
-    totalSpent90: 1048000,
+    totalSpent90: 1012000,
   };
 }
 

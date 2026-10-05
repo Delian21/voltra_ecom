@@ -1,7 +1,7 @@
 /**
  * Mock order seam (checkout flow phase).
  *
- * Today: in-memory store of mock-placed orders for this browser session.
+ * Today: localStorage-backed store of mock-placed orders for this browser session.
  * Backend phase: same signatures, fetch-based implementations; call sites
  * never change.
  *
@@ -36,11 +36,10 @@ function writeOrders(orders: Order[]): void {
   }
 }
 
-let nextId = 1000;
-
 function freshId(): string {
-  nextId += 1;
-  return `ORD-${String(nextId).padStart(4, "0")}`;
+  const time = Date.now().toString(36).toUpperCase();
+  const random = Math.random().toString(36).slice(2, 5).toUpperCase();
+  return `ORD-${time}${random}`;
 }
 
 function formattedDate(): string {
@@ -66,8 +65,8 @@ export function recordOrder(order: Omit<Order, "id" | "date">): Order {
 /**
  * Recent orders visible on the retailer dashboard.
  *
- * 오늘도 mock-first: the dashboard mixes the existing illustrative sample
- * orders with any mock-placed orders from this browser session.
+ * The dashboard mixes the existing illustrative sample orders with any
+ * mock-placed orders from this browser session.
  */
 export function listMockOrders(): ReadonlyArray<Order> {
   return readOrders();

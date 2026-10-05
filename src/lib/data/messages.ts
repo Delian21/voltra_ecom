@@ -60,17 +60,19 @@ function writeMessages(threadId: string, messages: Message[]): void {
   }
 }
 
-let nextThreadId = 1000;
-let nextMessageId = 1000;
+/** Time + random base-36 suffix, unique across page loads that reset a counter. */
+function uniqueSuffix(): string {
+  const time = Date.now().toString(36);
+  const random = Math.random().toString(36).slice(2, 5);
+  return `${time}${random}`.toUpperCase();
+}
 
 export function freshThreadId(): string {
-  nextThreadId += 1;
-  return `TH-${String(nextThreadId).padStart(4, "0")}`;
+  return `TH-${uniqueSuffix()}`;
 }
 
 export function freshMessageId(): string {
-  nextMessageId += 1;
-  return `MSG-${String(nextMessageId).padStart(4, "0")}`;
+  return `MSG-${uniqueSuffix()}`;
 }
 
 function formattedNow(): string {
