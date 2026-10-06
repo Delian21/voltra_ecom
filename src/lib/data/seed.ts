@@ -1,9 +1,8 @@
 /**
- * Voltra seed data — the single source of the demo catalog, shared by the mock
- * fallback (data/catalog.ts) and the DB seed script (scripts/seed-db.mjs).
+ * Voltra seed data — the single source of the demo catalog.
  *
  * Image fields use stable string keys ("pb-20k", "ear-pro"...), resolved to
- * bundled StaticImageData by data/images.ts. DB stores keys, never binaries.
+ * bundled StaticImageData by data/images.ts.
  */
 export interface SeedProduct {
   id: string;

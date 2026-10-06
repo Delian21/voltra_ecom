@@ -1,11 +1,8 @@
 /**
  * Client-safe catalog data — bundled seed only, zero server imports.
  *
- * Client components (cart math, product pickers) resolve against the bundled
- * seed, which mirrors the DB rows (catalog-parity test guards this). Server
- * components and route handlers use data/catalog.ts, which reads the DB.
- *
- * NO drizzle/pg imports may enter this file — it is pulled into browser bundles.
+ * Client components (cart math, product pickers) and server components alike
+ * resolve against the bundled seed.
  */
 import type { Product } from "@/lib/types";
 

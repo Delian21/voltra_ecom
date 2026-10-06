@@ -17,7 +17,7 @@ Product logic and design spec: [`PLAN.md`](./PLAN.md) is the source of truth; `V
 | Styling | Tailwind CSS 4 + shadcn/ui (copied into `src/components/ui`) |
 | Design | **Volt Dark** — graphite surfaces, volt-lime accent `#C6FF3E`, Space Grotesk / Inter / JetBrains Mono |
 | State | Zustand with `persist` (cart, auth, prefs) |
-| Data | Supabase Postgres via Drizzle (server-only), with the bundled seed as fallback |
+| Data | seed data + localStorage |
 | Tests | Playwright (`e2e/voltra.spec.ts`) |
 
 ## Routes
@@ -53,15 +53,6 @@ npm run e2e        # Playwright end-to-end tests
 npm run e2e:headed # same, with a visible browser
 ```
 
-## Environment
-
-Local secrets live in `.env.local` (gitignored) — never in code, never in git.
-
-| Variable | Purpose |
-|---|---|
-| `ORDERS_ENABLED` | Kill switch for `POST /api/orders`. Set to `true` to accept orders; any other value answers 503 so ordering stays closed during rollout. |
-| `DATABASE_URL` | Supabase Postgres connection string for the server-only Drizzle data layer. Unset, the catalog falls back to the bundled seed. |
-
 ## Where things live
 
 ```
@@ -77,7 +68,7 @@ src/
   hooks/
 ```
 
-**Data seam:** components never touch storage directly — all data access goes through `src/lib/data/*` as async functions. The product catalog and retailer dashboard read Supabase Postgres through Drizzle (server-only, in `src/lib/data/catalog.ts`), falling back to the bundled seed in `src/lib/data/seed.ts` when `DATABASE_URL` is unset or a query fails. Orders, messages and the six Zustand stores remain localStorage-backed prototype modules; when the backend phase reaches them they get swapped for fetch-based implementations with the same signatures, so no component rewrites.
+**Data seam:** components never touch storage directly — all data access goes through `src/lib/data/*` as async functions. The product catalog reads the bundled seed in `src/lib/data/seed.ts` (server-only, via `src/lib/data/catalog.ts`); orders, messages and the six Zustand stores are localStorage-backed prototype modules. A future backend swaps in fetch-based implementations with the same signatures, so no component rewrites.
 
 ## Deployment
 

@@ -1,6 +1,6 @@
 /**
  * GET /api/products/[slug] — one product by slug.
- * 404 when unknown. Falls back to mock data when DATABASE_URL is absent.
+ * 404 when unknown; serves the bundled seed.
  */
 import { NextResponse } from "next/server";
 

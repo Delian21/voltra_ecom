@@ -1,7 +1,6 @@
 /**
  * GET /api/products — full catalog list.
- * Reads from the DB via the data layer; falls back to the same mock seed the
- * app used pre-backend, so preview builds without DATABASE_URL still work.
+ * Serves the bundled seed through the data layer.
  */
 import { NextResponse } from "next/server";
 

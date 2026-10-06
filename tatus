@@ -1,0 +1,5 @@
+[33mee00a9c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mbackup/backend-v1[m[33m)[m Backend phase 1: orders tables, createOrder, kill switch (parked)
+[33m01d7cc6[m Move catalog reads to Drizzle queries and tidy the data layer
+[33m6f078f2[m feat: enhance product stock handling with out-of-stock indicators and wholesale restrictions
+[33m248e689[m Fix duplicate mock IDs and stale retailer totals
+[33mf373cac[m Fix cart pricing-mode and stock bugs
