@@ -53,6 +53,12 @@ npm run e2e        # Playwright end-to-end tests
 npm run e2e:headed # same, with a visible browser
 ```
 
+## Environment
+
+| Variable | Purpose |
+|---|---|
+| `NEXT_PUBLIC_SITE_URL` | Public site origin used as `metadataBase` for share/OG image URLs. Falls back to Netlify's build-time `URL`, then `http://localhost:3000`. Set this when you get a real domain. |
+
 ## Where things live
 
 ```

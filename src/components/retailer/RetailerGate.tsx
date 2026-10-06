@@ -15,7 +15,7 @@ const BUSINESS_TYPES = [
   "Other",
 ];
 
-const VOLUMES = ["1–5 cartons", "6–20 cartons", "20+ cartons"];
+const VOLUMES = ["Under 100 units", "100 to 300 units", "300+ units"];
 
 const EYEBROW =
   "font-mono text-[10px] uppercase tracking-[0.16em] text-volt-text";

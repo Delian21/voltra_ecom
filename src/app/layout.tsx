@@ -32,7 +32,9 @@ export const metadata: Metadata = {
   },
   description:
     "Electronics that show up when you need them — direct-sourced, fair-priced, and stocked deep enough that “out of stock” is somebody else’s problem.",
-  metadataBase: new URL("https://voltra.shop"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? process.env.URL ?? "http://localhost:3000",
+  ),
   openGraph: {
     siteName: "Voltra",
     type: "website",
