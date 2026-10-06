@@ -53,6 +53,15 @@ npm run e2e        # Playwright end-to-end tests
 npm run e2e:headed # same, with a visible browser
 ```
 
+## Environment
+
+Local secrets live in `.env.local` (gitignored) — never in code, never in git.
+
+| Variable | Purpose |
+|---|---|
+| `ORDERS_ENABLED` | Kill switch for `POST /api/orders`. Set to `true` to accept orders; any other value answers 503 so ordering stays closed during rollout. |
+| `DATABASE_URL` | Supabase Postgres connection string for the server-only Drizzle data layer. Unset, the catalog falls back to the bundled seed. |
+
 ## Where things live
 
 ```
