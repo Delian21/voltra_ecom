@@ -67,7 +67,7 @@ export function ProductGallery({ product }: { product: Product }) {
           src={current}
           alt={`${product.name} — view ${active + 1} of ${gallery.length}`}
           fill
-          sizes="(min-width: 768px) 560px, 100vw"
+          sizes="(min-width: 768px) 620px, 100vw"
           quality={85}
           priority={active === 0}
           placeholder="blur"

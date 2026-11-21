@@ -23,7 +23,7 @@ export default async function ProductPage({
   if (!product) notFound();
 
   return (
-    <div className="mx-auto w-full max-w-[1180px] px-5 py-10">
+    <div className="mx-auto w-full max-w-[1240px] px-5 py-10">
       <Link
         href="/shop"
         className="inline-flex items-center gap-1.5 font-mono text-xs text-volt-text transition-colors hover:text-volt"
@@ -31,8 +31,10 @@ export default async function ProductPage({
         <ArrowLeft className="size-3.5" /> Back to shop
       </Link>
 
-      <div className="mt-7 grid gap-10 md:grid-cols-2">
-        <ProductGallery product={product} />
+      <div className="mt-7 grid gap-10 md:grid-cols-[minmax(0,1.08fr)_minmax(0,1fr)] md:gap-12">
+        <div className="md:sticky md:top-6 md:self-start">
+          <ProductGallery product={product} />
+        </div>
 
         <div>
           <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-volt-text">

@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import { Minus, Plus } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { formatNaira } from "@/components/product/PriceTag";
@@ -19,156 +21,141 @@ function deliveryEstimate(stock: number): string {
 export function ProductActions({ product }: { product: Product }) {
   const add = useCart((s) => s.add);
   const remove = useCart((s) => s.remove);
+  const updateQty = useCart((s) => s.updateQty);
   const saveTotal = product.price * 10 - product.wholesale * 10;
   const savePct = savingsPercent(product.price, product.wholesale);
   const outOfStock = product.stock <= 0;
   const wholesaleBlocked = product.stock < 10;
+  const [qty, setQty] = useState(1);
+  const maxQty = Math.max(1, product.stock);
+  const atMax = qty >= maxQty;
+
+  function addToCart() {
+    add(product.id, "unit");
+    // The store steps unit lines by one, so top up to the chosen quantity.
+    if (qty > 1) updateQty(product.id, qty - 1);
+    toast(`Added ×${qty} — ${formatNaira(product.price)} each · ${product.name}`, {
+      action: {
+        label: "Undo",
+        onClick: () => {
+          remove(product.id);
+          toast.success(`Undid — ${product.name}`);
+        },
+      },
+    });
+  }
+
+  function addWholesale() {
+    add(product.id, "wholesale");
+    toast(
+      `Added ×10 (wholesale) — ${formatNaira(product.wholesale)}/unit · ${product.name}`,
+      {
+        action: {
+          label: "Undo",
+          onClick: () => {
+            remove(product.id);
+            toast.success(`Undid ×10 — ${product.name}`);
+          },
+        },
+      },
+    );
+  }
+
+  const stepper = (
+    <div className="flex h-12 items-stretch rounded-lg border border-line bg-bg1">
+      <button
+        type="button"
+        aria-label="Decrease quantity"
+        disabled={qty <= 1}
+        onClick={() => setQty((q) => Math.max(1, q - 1))}
+        className="grid w-10 place-items-center text-ink-mid transition-colors hover:text-volt-text disabled:opacity-35 disabled:hover:text-ink-mid"
+      >
+        <Minus className="size-4" />
+      </button>
+      <span
+        aria-live="polite"
+        className="grid w-9 place-items-center font-mono text-sm text-ink-hi"
+      >
+        {qty}
+      </span>
+      <button
+        type="button"
+        aria-label="Increase quantity"
+        disabled={atMax}
+        onClick={() => setQty((q) => Math.min(maxQty, q + 1))}
+        className="grid w-10 place-items-center text-ink-mid transition-colors hover:text-volt-text disabled:opacity-35 disabled:hover:text-ink-mid"
+      >
+        <Plus className="size-4" />
+      </button>
+    </div>
+  );
 
   return (
     <>
-      {/* Sticky mobile add-to-cart bar with savings preview */}
+      {/* Mobile add-to-cart bar */}
       <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-line bg-bg0/95 backdrop-blur-sm sm:hidden">
-        <div className="flex items-center justify-between gap-3 px-4 py-3">
-          <div className="flex flex-col">
-            <span className="font-mono text-[10px] text-ink-low">Wholesale saves</span>
-            <span className="font-mono text-sm font-semibold text-good">
-              ₦{saveTotal.toLocaleString("en-NG")} ({savePct}%) on ×10
-            </span>
-          </div>
+        <div className="flex items-center gap-2.5 py-3 pl-4 pr-[76px]">
+          {stepper}
           <Button
-            size="lg"
-            className="flex-1"
+            className="h-12 flex-1 font-semibold"
             disabled={outOfStock}
-            onClick={() => {
-              add(product.id, "unit");
-              toast(
-                `Added — ${formatNaira(product.price)} · ${product.name}`,
-                {
-                  action: {
-                    label: "Undo",
-                    onClick: () => {
-                      remove(product.id);
-                      toast.success(`Undid — ${product.name}`);
-                    },
-                  },
-                },
-              );
-            }}
+            onClick={addToCart}
           >
             {outOfStock ? "Out of stock" : "Add to cart"}
           </Button>
         </div>
       </div>
 
-      {/* Desktop: actions */}
-      <div className="mt-7 hidden sm:flex flex-wrap gap-3">
-        <Button
-          size="lg"
-          disabled={outOfStock}
-          onClick={() => {
-            add(product.id, "unit");
-            toast(
-              `Added — ${formatNaira(product.price)} · ${product.name}`,
-              {
-                action: {
-                  label: "Undo",
-                  onClick: () => {
-                    remove(product.id);
-                    toast.success(`Undid — ${product.name}`);
-                  },
-                },
-              },
-            );
-          }}
-        >
-          {outOfStock ? "Out of stock" : "Add to cart"}
-        </Button>
-        <Button
-          size="lg"
-          variant="secondary"
-          disabled={wholesaleBlocked}
-          onClick={() => {
-            add(product.id, "wholesale");
-            toast(
-              `Added ×10 (wholesale) — ${formatNaira(product.wholesale)}/unit · ${product.name}`,
-              {
-                action: {
-                  label: "Undo",
-                  onClick: () => {
-                    remove(product.id);
-                    toast.success(`Undid ×10 — ${product.name}`);
-                  },
-                },
-              },
-            );
-          }}
-        >
-          Add ×10 at wholesale
-        </Button>
-        {wholesaleBlocked && (
-          <span className="self-center font-mono text-[10.5px] text-ink-low">
-            Min 10 units for wholesale
-          </span>
-        )}
-        <Button
-          size="lg"
-          variant="ghost"
-          onClick={() => toast("You will be notified if stock runs low")}
-        >
-          Notify me if this runs low
-        </Button>
-      </div>
-
-      {/* Wholesale savings display */}
-      <div className="mt-4 rounded-xl border border-line bg-bg2 p-4">
-        <div className="flex items-center justify-between gap-3">
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-ink-low">
-            Wholesale savings
-          </p>
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-ink-low">
-            Delivery
-          </p>
-        </div>
-        <div className="mt-3 flex items-center justify-between gap-3">
-          <div className="flex-1">
-            <p className="text-sm text-ink-mid">
-              Buy 10 at wholesale: {formatNaira(product.wholesale)}/unit
-            </p>
-            <p className="mt-1 font-mono text-lg font-semibold text-good">
-              You save {formatNaira(saveTotal)} ({savePct}%) vs. retail
-            </p>
-          </div>
-          <div className="flex-1">
-            <p className="text-sm text-ink-mid">{deliveryEstimate(product.stock)}</p>
-          </div>
+      {/* Desktop: quantity + actions */}
+      <div className="mt-7 hidden sm:block">
+        <div className="flex flex-wrap gap-2.5">
+          {stepper}
           <Button
-            size="lg"
-            className="flex-shrink-0"
-            disabled={wholesaleBlocked}
-            onClick={() => {
-              add(product.id, "wholesale");
-              toast(
-                `Added ×10 (wholesale) — ${formatNaira(product.wholesale)}/unit · ${product.name}`,
-                {
-                  action: {
-                    label: "Undo",
-                    onClick: () => {
-                      remove(product.id);
-                      toast.success(`Undid ×10 — ${product.name}`);
-                    },
-                  },
-                },
-              );
-            }}
+            className="h-12 flex-1 px-6 text-[15px] font-semibold"
+            disabled={outOfStock}
+            onClick={addToCart}
           >
-            Add ×10
+            {outOfStock ? "Out of stock" : "Add to cart"}
           </Button>
-          {wholesaleBlocked && (
+        </div>
+
+        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
+          <Button
+            variant="ghost"
+            className="h-10 border border-line px-4 text-[13px] text-ink-hi hover:bg-bg2"
+            disabled={wholesaleBlocked}
+            onClick={addWholesale}
+          >
+            Add ×10 at wholesale
+          </Button>
+          {wholesaleBlocked ? (
             <span className="font-mono text-[10.5px] text-ink-low">
               Min 10 units for wholesale
             </span>
+          ) : (
+            <button
+              type="button"
+              onClick={() => toast("You will be notified if stock runs low")}
+              className="text-[13px] text-ink-mid underline-offset-4 transition-colors hover:text-volt-text hover:underline"
+            >
+              Notify me if this runs low
+            </button>
           )}
         </div>
+      </div>
+
+      {/* Wholesale savings note */}
+      <div className="mt-4 rounded-xl border border-line bg-bg2 p-4">
+        <p className="text-[13px] leading-6 text-ink-mid">
+          Buy 10 at {formatNaira(product.wholesale)}/unit and save{" "}
+          <span className="font-medium text-good">
+            {formatNaira(saveTotal)} ({savePct}%)
+          </span>{" "}
+          vs. retail.
+        </p>
+        <p className="mt-1 text-[13px] leading-6 text-ink-low">
+          {deliveryEstimate(product.stock)}
+        </p>
       </div>
     </>
   );
