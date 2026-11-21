@@ -18,6 +18,7 @@ export function ProductImage({
   priority = false,
   sizes = "56px",
   quality,
+  fit = "cover",
 }: {
   product: Product;
   className?: string;
@@ -27,7 +28,10 @@ export function ProductImage({
   /** next/image `sizes` hint matching the rendered box. */
   sizes?: string;
   quality?: number;
+  /** Contain shows the whole product (with padding); cover fills edge to edge. */
+  fit?: "cover" | "contain";
 }) {
+  const fitClass = fit === "contain" ? "object-contain" : "object-cover";
   // "ok" (optimizer) → "raw" (direct static file) → "glyph" (emoji).
   const [stage, setStage] = useState<"ok" | "raw" | "glyph">("ok");
 
@@ -54,7 +58,7 @@ export function ProductImage({
             src={rawSrc}
             alt=""
             onError={() => setStage("glyph")}
-            className="absolute inset-0 size-full object-cover"
+            className={`absolute inset-0 size-full ${fitClass}`}
           />
         ) : (
           <Image
@@ -66,7 +70,7 @@ export function ProductImage({
             priority={priority}
             placeholder="blur"
             onError={() => setStage("raw")}
-            className="object-cover"
+            className={fitClass}
           />
         )
       ) : (

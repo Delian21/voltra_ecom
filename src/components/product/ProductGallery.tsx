@@ -58,11 +58,7 @@ export function ProductGallery({ product }: { product: Product }) {
         role="group"
         tabIndex={0}
         aria-label={`${product.name} gallery — use arrow keys to switch photos`}
-        className="relative h-72 touch-pan-y overflow-hidden rounded-xl border border-line bg-bg1 outline-none focus-visible:border-volt md:h-96"
-        style={{
-          backgroundImage:
-            "radial-gradient(160px 120px at 70% 20%, rgba(198,255,62,0.16), transparent 70%), linear-gradient(150deg, #1B2130, #12161F)",
-        }}
+        className="relative aspect-square touch-pan-y overflow-hidden rounded-xl border border-line bg-bg1 p-3 outline-none focus-visible:border-volt"
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
@@ -75,7 +71,7 @@ export function ProductGallery({ product }: { product: Product }) {
           quality={85}
           priority={active === 0}
           placeholder="blur"
-          className="object-cover"
+          className="object-contain"
           draggable={false}
         />
       </div>
@@ -94,7 +90,7 @@ export function ProductGallery({ product }: { product: Product }) {
               aria-selected={i === active}
               aria-label={`View photo ${i + 1}`}
               onClick={() => goTo(i)}
-              className={`relative h-16 w-20 overflow-hidden rounded-lg border transition-colors ${
+              className={`relative size-16 overflow-hidden rounded-lg border bg-bg1 p-1 transition-colors ${
                 i === active
                   ? "border-volt"
                   : "border-line opacity-60 hover:opacity-100"
@@ -104,9 +100,9 @@ export function ProductGallery({ product }: { product: Product }) {
                 src={shot}
                 alt=""
                 fill
-                sizes="80px"
+                sizes="64px"
                 placeholder="blur"
-                className="object-cover"
+                className="object-contain"
               />
             </button>
           ))}
