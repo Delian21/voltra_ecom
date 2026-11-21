@@ -7,10 +7,13 @@ import { B2BBand } from "@/components/landing/B2BBand";
 
 export default async function HomePage() {
   const products = await listProducts();
+  const heroProduct =
+    products.find((p) => p.slug === "voltra-20000mah-power-bank") ??
+    products[0];
 
   return (
     <>
-      <Hero />
+      <Hero product={heroProduct} />
       <AudienceCards />
       <TrustBar />
       <FeaturedProducts products={products.slice(0, 4)} />
