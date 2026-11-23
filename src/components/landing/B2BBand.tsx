@@ -23,16 +23,11 @@ export function B2BBand() {
         >
           <LightningBolt />
         </div>
-        <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-volt-text">
-          For retailers · wholesale · trade credit · restock plans
-        </p>
-        <h2 className="mt-4 max-w-xl font-display text-2xl font-bold tracking-tight text-ink-hi md:text-3xl">
+        <h2 className="max-w-xl font-display text-2xl font-bold tracking-tight text-ink-hi md:text-3xl">
           Stock your shop without the guesswork.
         </h2>
-        <p className="mt-3 max-w-xl text-sm leading-6 text-ink-mid">
-          Wholesale pricing from 10 units, trade credit on account, and
-          restock plans that watch your stock so you never hear "it ran out"
-          from a customer first.
+        <p className="mt-3 max-w-2xl text-[13.5px] leading-6 text-ink-mid">
+          Wholesale from 10 units, trade credit, and restock plans that watch your stock.
         </p>
         <Button asChild size="lg" className="mt-7">
           <Link href="/retailer">Apply for wholesale access</Link>

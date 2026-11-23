@@ -13,6 +13,9 @@ export function FeaturedProducts({ products }: { products: Product[] }) {
           <h2 className="font-display text-2xl font-bold tracking-tight text-ink-hi">
             Featured products
           </h2>
+          <p className="mt-2 max-w-md text-[13.5px] leading-6 text-ink-mid">
+            Four picks from this week&apos;s drop — in stock and ready to ship.
+          </p>
         </div>
         <Link
           href="/shop"

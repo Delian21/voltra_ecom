@@ -21,11 +21,16 @@ const CARDS = [
 export function AudienceCards() {
   return (
     <section className="mx-auto w-full max-w-[1180px] px-5 py-20">
-      <div className="mb-9 flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="font-mono text-[10px] uppercase tracking-[0.22em] text-volt-text">
+      <div className="mb-9">
+        <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-volt-text">
           <span className="mr-3 text-ink-low">01</span>Pick your lane
+        </p>
+        <h2 className="mt-3 font-display text-2xl font-bold tracking-tight text-ink-hi">
+          Shop for yourself, or stock your shop
         </h2>
-        <p className="text-[13px] text-ink-low">Two journeys, one catalog.</p>
+        <p className="mt-2 max-w-lg text-[13.5px] leading-6 text-ink-mid">
+          Two journeys, one catalog.
+        </p>
       </div>
       <div className="grid gap-4 md:grid-cols-2">
         {CARDS.map((c) => (
