@@ -1,24 +1,36 @@
-import Image from "next/image";
 import Link from "next/link";
-import type { Product } from "@/lib/types";
 import { Button } from "@/components/ui/button";
+import { WatermarkBolt } from "./LightningBolt";
 
-export function Hero({ product }: { product: Product }) {
+export function Hero() {
   return (
     <section className="relative overflow-hidden border-b border-line">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 [background-image:linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] [background-size:28px_28px,28px_28px] [mask-image:linear-gradient(to_bottom,black_52%,transparent_97%)]"
       />
-      {/* Glow blob — breathes with the bolt via the root --bolt-opacity var
-          that LightningBolt's RAF clock exports every frame. */}
+      {/* Ambient wash behind the top of the hero. */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 -top-40 mx-auto h-80 max-w-3xl rounded-full bg-volt/10 blur-[120px]"
         style={{ opacity: "calc(0.45 + 0.55 * var(--bolt-opacity, 0.5))" }}
       />
       <div className="relative mx-auto grid w-full max-w-[1180px] items-center gap-10 px-5 pb-14 pt-14 md:grid-cols-[1.05fr_0.95fr] md:gap-12 md:pb-24 md:pt-28">
-        <div className="relative z-10">
+        {/* Bolt — above the headline on mobile, the right-hand column on desktop. */}
+        <div className="order-1 flex justify-center md:order-2 md:justify-end">
+          <div
+            aria-hidden
+            className="hero-bolt-float w-[140px] md:w-[clamp(220px,28vw,380px)] [&>svg]:h-auto [&>svg]:w-full"
+            style={{
+              filter:
+                "drop-shadow(0 0 24px rgba(198,255,62,0.55)) drop-shadow(0 0 90px rgba(198,255,62,0.25))",
+            }}
+          >
+            <WatermarkBolt />
+          </div>
+        </div>
+
+        <div className="relative z-10 order-2 md:order-1">
           <p className="font-mono text-[10px] uppercase tracking-[0.16em] leading-relaxed text-volt-text sm:text-[11px] sm:tracking-[0.22em]">
             Voltra · power banks · earbuds · chargers
           </p>
@@ -52,23 +64,6 @@ export function Hero({ product }: { product: Product }) {
             >
               <Link href="/retailer">For retailers</Link>
             </Button>
-          </div>
-        </div>
-
-        {/* Featured product — sits below the copy on mobile, beside it on desktop. */}
-        <div className="relative mx-auto w-full max-w-[400px] md:max-w-[480px]">
-          <div
-            className="relative z-10 overflow-hidden rounded-[20px] border border-line bg-bg1"
-            style={{ boxShadow: "0 0 90px rgba(198,255,62,0.18)" }}
-          >
-            <Image
-              src={product.image}
-              alt={product.name}
-              priority
-              placeholder="blur"
-              sizes="(min-width: 768px) 480px, 90vw"
-              className="aspect-[4/3] w-full object-cover"
-            />
           </div>
         </div>
       </div>
