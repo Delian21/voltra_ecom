@@ -19,11 +19,12 @@ export function StockPill({
   return (
     <span
       className={cn(
-        "rounded-full px-2 py-0.5 font-mono text-[9px] font-semibold",
+        "inline-flex items-center gap-1 rounded-full px-2 py-0.5 font-mono text-[9px] font-semibold",
         VARIANTS[level],
         className,
       )}
     >
+      <span aria-hidden className="size-1.5 flex-none rounded-full bg-current" />
       {label}
     </span>
   );
