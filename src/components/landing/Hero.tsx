@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { WatermarkBolt } from "./LightningBolt";
 
@@ -52,7 +53,10 @@ export function Hero() {
                 boxShadow: "0 0 calc(28px * var(--bolt-opacity, 0.5)) rgba(198,255,62,0.30)",
               }}
             >
-              <Link href="/shop">Shop the catalog</Link>
+              <Link href="/shop">
+                Shop the catalog
+                <ArrowRight className="transition-transform group-hover/button:translate-x-0.5" />
+              </Link>
             </Button>
             <Button
               asChild
@@ -62,8 +66,27 @@ export function Hero() {
                 boxShadow: "0 0 calc(20px * var(--bolt-opacity, 0.5)) rgba(198,255,62,0.16)",
               }}
             >
-              <Link href="/retailer">For retailers</Link>
+              <Link href="/retailer">
+                For retailers
+                <ArrowRight className="transition-transform group-hover/button:translate-x-0.5" />
+              </Link>
             </Button>
+          </div>
+
+          {/* Trust row */}
+          <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 md:mt-8">
+            {["Ready to ship", "Fair prices, always"].map((item) => (
+              <span
+                key={item}
+                className="inline-flex items-center gap-2 text-[12.5px] text-ink-mid"
+              >
+                <span
+                  aria-hidden
+                  className="size-1.5 rounded-full bg-volt shadow-[0_0_8px_rgba(198,255,62,0.75)]"
+                />
+                {item}
+              </span>
+            ))}
           </div>
         </div>
       </div>
