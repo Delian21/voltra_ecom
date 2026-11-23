@@ -10,7 +10,7 @@ import { CartLines } from "@/components/cart/CartLines";
 import { useCartSummary } from "@/components/cart/useCartSummary";
 import { formatNaira } from "@/components/product/PriceTag";
 
-export function CartSheet() {
+export function CartSheet({ showLabel = false }: { showLabel?: boolean }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const { count, total, saved } = useCartSummary();
@@ -36,11 +36,20 @@ export function CartSheet() {
         aria-label={`Open cart${count > 0 ? `, ${count} items` : ""}`}
         aria-haspopup="dialog"
         onClick={() => setOpen(true)}
-        className="relative flex h-9 w-9 items-center justify-center rounded-full border border-line-strong bg-bg1 text-ink-mid transition-colors hover:border-volt hover:text-ink-hi"
+        className={`relative flex h-9 items-center justify-center rounded-full border border-line-strong bg-bg1 text-ink-mid transition-colors hover:border-volt hover:text-ink-hi ${
+          showLabel ? "gap-2 pl-3 pr-3.5" : "w-9"
+        }`}
       >
         <ShoppingCart className="size-4" />
+        {showLabel && (
+          <span className="text-[13px] font-medium leading-none">Cart</span>
+        )}
         {count > 0 && (
-          <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-volt px-1 font-mono text-[9px] font-semibold text-volt-ink">
+          <span
+            className={`flex h-4 min-w-4 items-center justify-center rounded-full bg-volt px-1 font-mono text-[9px] font-semibold text-volt-ink ${
+              showLabel ? "" : "absolute -right-1 -top-1"
+            }`}
+          >
             {count}
           </span>
         )}

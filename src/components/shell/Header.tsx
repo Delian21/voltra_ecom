@@ -9,6 +9,7 @@ import { LogoMark } from "@/components/LogoMark";
 import { CartSheet } from "@/components/cart/CartSheet";
 import { RetailerStatusChip } from "@/components/shell/RetailerStatusChip";
 import { AccountMenu } from "@/components/shell/AccountMenu";
+import { HeaderSearch } from "@/components/shell/HeaderSearch";
 
 const NAV_LINKS = [
   { label: "Shop", href: "/shop" },
@@ -49,8 +50,13 @@ export function Header() {
           </span>
         </Link>
 
+        {/* Header search — desktop only; the mobile menu carries its own */}
+        <div className="hidden min-w-0 flex-1 justify-center px-2 md:flex">
+          <HeaderSearch className="w-full max-w-[300px]" />
+        </div>
+
         {/* Desktop nav */}
-        <nav className="hidden items-center gap-6 sm:flex">
+        <nav className="hidden items-center gap-6 md:flex">
           {NAV_LINKS.map((l) => {
             const active = isActive(l.href);
             return (
@@ -70,11 +76,11 @@ export function Header() {
           })}
           <RetailerStatusChip />
           <AccountMenu />
-          <CartSheet />
+          <CartSheet showLabel />
         </nav>
 
         {/* Mobile: cart + menu toggle */}
-        <div className="flex items-center gap-2 sm:hidden">
+        <div className="flex items-center gap-2 md:hidden">
           <CartSheet />
           <button
             type="button"
@@ -95,7 +101,7 @@ export function Header() {
         createPortal(
           <div
             id="mobile-menu"
-            className="fixed inset-x-0 bottom-0 top-16 z-40 sm:hidden"
+            className="fixed inset-x-0 bottom-0 top-16 z-40 md:hidden"
           >
             <div
               aria-hidden
@@ -103,6 +109,9 @@ export function Header() {
               className="absolute inset-0 bg-black/70 backdrop-blur-xs animate-in fade-in-0 duration-200"
             />
             <div className="absolute inset-x-0 top-0 border-b border-line bg-bg0/95 p-4 shadow-2xl backdrop-blur-md animate-in slide-in-from-top-2 ease-out duration-200">
+              <div className="pb-3">
+                <HeaderSearch onNavigate={closeMenu} />
+              </div>
               <nav aria-label="Mobile" className="flex flex-col gap-1">
                 {NAV_LINKS.map((l) => {
                   const active = isActive(l.href);
