@@ -29,14 +29,14 @@ export function ProductCard({ product }: { product: Product }) {
       >
         <div
           aria-hidden
-          className="relative aspect-square bg-bg1 p-3 transition-transform duration-300 group-hover:scale-105"
+          className="relative aspect-square overflow-hidden bg-bg1 transition-transform duration-300 group-hover:scale-105"
         >
           <ProductImage
             product={product}
             sizesClass="absolute inset-0 size-full"
             textClass="text-4xl"
             sizes="(min-width: 1024px) 280px, (min-width: 640px) 45vw, 90vw"
-            fit="contain"
+            fit="cover"
           />
         </div>
         <div className="p-4">

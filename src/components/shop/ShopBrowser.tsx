@@ -135,7 +135,7 @@ export function ShopBrowser({
           </button>
         ))}
         <Select value={sort} onValueChange={(v) => setSort(v as SortOption)}>
-          <SelectTrigger className="h-7 border-line-strong bg-bg1 pl-8 pr-7 text-xs text-ink-hi [&>span]:text-ink-hi">
+          <SelectTrigger className="relative h-7 border-line-strong bg-bg1 pl-8 pr-7 text-xs text-ink-hi [&>span]:text-ink-hi">
             <ArrowUpDown className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-ink-low" />
             <SelectValue placeholder="Sort" />
           </SelectTrigger>

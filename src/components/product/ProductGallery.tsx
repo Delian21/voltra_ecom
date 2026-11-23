@@ -58,7 +58,7 @@ export function ProductGallery({ product }: { product: Product }) {
         role="group"
         tabIndex={0}
         aria-label={`${product.name} gallery — use arrow keys to switch photos`}
-        className="relative aspect-square touch-pan-y overflow-hidden rounded-xl border border-line bg-bg1 p-3 outline-none focus-visible:border-volt"
+        className="relative aspect-[4/3] touch-pan-y overflow-hidden rounded-xl border border-line bg-bg1 outline-none focus-visible:border-volt"
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
@@ -71,7 +71,7 @@ export function ProductGallery({ product }: { product: Product }) {
           quality={85}
           priority={active === 0}
           placeholder="blur"
-          className="object-contain"
+          className="object-cover"
           draggable={false}
         />
       </div>

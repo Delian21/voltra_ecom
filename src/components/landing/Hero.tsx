@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/lib/types";
 import { Button } from "@/components/ui/button";
-import { LightningBolt } from "./LightningBolt";
 
 export function Hero({ product }: { product: Product }) {
   return (
@@ -58,26 +57,17 @@ export function Hero({ product }: { product: Product }) {
 
         {/* Featured product — sits below the copy on mobile, beside it on desktop. */}
         <div className="relative mx-auto w-full max-w-[400px] md:max-w-[480px]">
-          {/* Faint bolt accent, tucked behind the product tile (never behind the headline). */}
           <div
-            aria-hidden
-            className="pointer-events-none absolute -right-6 -top-8 z-0 h-[200px] w-[100px] rotate-12 opacity-20 md:-right-10 md:-top-14 md:h-[360px] md:w-[180px] md:opacity-25"
+            className="relative z-10 overflow-hidden rounded-[20px] border border-line bg-bg1"
+            style={{ boxShadow: "0 0 90px rgba(198,255,62,0.18)" }}
           >
-            <LightningBolt mode="calm" />
-          </div>
-          {/* Soft lime glow behind the product. */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-x-6 bottom-4 top-10 z-0 rounded-full bg-volt/20 blur-[80px] md:inset-x-8 md:blur-[110px]"
-          />
-          <div className="relative z-10 overflow-hidden rounded-2xl border border-line bg-bg1">
             <Image
               src={product.image}
               alt={product.name}
               priority
               placeholder="blur"
               sizes="(min-width: 768px) 480px, 90vw"
-              className="aspect-[4/3] w-full object-contain p-5 md:p-6"
+              className="aspect-[4/3] w-full object-cover"
             />
           </div>
         </div>
