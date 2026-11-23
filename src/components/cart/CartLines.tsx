@@ -65,16 +65,17 @@ export function CartLines() {
       {items.map(({ line, product, unitPrice, lineTotal, saved, retailTotal }) => (
         <li
           key={line.id}
-          className="flex gap-3.5 border-b border-line py-4 last:border-b-0"
+          className="flex gap-4 border-b border-line py-5 last:border-b-0"
         >
           <ProductImage
             product={product}
-            sizesClass="size-14 rounded-lg"
+            sizesClass="size-[72px] rounded-lg"
             className="border border-line"
             textClass="text-2xl"
+            sizes="72px"
           />
           <div className="min-w-0 flex-1">
-            <p className="truncate text-[13px] font-semibold text-ink-hi">
+            <p className="truncate text-[15px] font-semibold text-ink-hi">
               {product.name}
             </p>
             <p className="mt-0.5 font-mono text-[10.5px] text-ink-low">
@@ -131,7 +132,7 @@ export function CartLines() {
               </button>
             </div>
           </div>
-          <p className="flex-none font-mono text-[12.5px] font-semibold text-ink-hi">
+          <p className="flex-none text-right font-mono text-[13px] font-semibold text-ink-hi">
             {formatNaira(lineTotal)}
           </p>
         </li>

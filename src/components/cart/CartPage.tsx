@@ -27,7 +27,7 @@ export function CartPage() {
         <CartLines />
       ) : (
         <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_320px]">
-          <div className="border-t border-line">
+          <div className="min-w-0 border-t border-line">
             <CartLines />
           </div>
           <aside className="h-fit rounded-xl border border-line bg-bg1 p-6">
