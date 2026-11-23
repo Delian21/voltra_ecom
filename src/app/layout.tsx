@@ -59,7 +59,14 @@ export default function RootLayout({
         <main className="flex-1">{children}</main>
         <Footer />
         <WhatsAppFab />
-        <Toaster theme="dark" position="top-center" richColors />
+        <Toaster
+          theme="dark"
+          position="top-center"
+          offset={72}
+          mobileOffset={72}
+          duration={4000}
+          richColors
+        />
       </body>
     </html>
   );
