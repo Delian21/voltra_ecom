@@ -51,12 +51,12 @@ export function Header() {
         </Link>
 
         {/* Header search — desktop only; the mobile menu carries its own */}
-        <div className="hidden min-w-0 flex-1 justify-center px-2 md:flex">
+        <div className="hidden min-w-0 flex-1 justify-center px-2 lg:flex">
           <HeaderSearch className="w-full max-w-[300px]" />
         </div>
 
         {/* Desktop nav */}
-        <nav className="hidden items-center gap-6 md:flex">
+        <nav className="hidden items-center gap-6 lg:flex">
           {NAV_LINKS.map((l) => {
             const active = isActive(l.href);
             return (
@@ -80,7 +80,7 @@ export function Header() {
         </nav>
 
         {/* Mobile: cart + menu toggle */}
-        <div className="flex items-center gap-2 md:hidden">
+        <div className="flex items-center gap-2 lg:hidden">
           <CartSheet />
           <button
             type="button"
@@ -101,7 +101,7 @@ export function Header() {
         createPortal(
           <div
             id="mobile-menu"
-            className="fixed inset-x-0 bottom-0 top-16 z-40 md:hidden"
+            className="fixed inset-x-0 bottom-0 top-16 z-40 lg:hidden"
           >
             <div
               aria-hidden
