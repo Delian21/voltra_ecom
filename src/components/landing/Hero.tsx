@@ -20,7 +20,7 @@ export function Hero() {
         <div className="order-1 flex justify-center md:order-2 md:justify-end">
           <div
             aria-hidden
-            className="hero-bolt-float w-[140px] md:w-[clamp(220px,28vw,380px)] [&>svg]:h-auto [&>svg]:w-full"
+            className="hero-bolt-float w-[140px] md:aspect-[3/8] md:h-[clamp(380px,42vw,560px)] md:w-auto [&>svg]:h-auto [&>svg]:w-full md:[&>svg]:size-full"
             style={{
               filter:
                 "drop-shadow(0 0 24px rgba(198,255,62,0.55)) drop-shadow(0 0 90px rgba(198,255,62,0.25))",
