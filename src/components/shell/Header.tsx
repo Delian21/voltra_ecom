@@ -138,10 +138,8 @@ export function Header() {
                   );
                 })}
                 <div className="my-2 h-px bg-line" />
-                <div className="flex items-center justify-between gap-3 px-2 py-2">
-                  <RetailerStatusChip />
-                </div>
-                <div className="px-2 py-2">
+                <RetailerStatusChip variant="menu" />
+                <div className="mt-1 px-2 py-2">
                   <AccountMenu />
                 </div>
               </nav>

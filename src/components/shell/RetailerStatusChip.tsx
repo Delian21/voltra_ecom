@@ -15,7 +15,7 @@ const CONSOLE_LINKS = [
 
 const LINK_STATES = {
   none: {
-    label: "Apply",
+    label: "Become a retailer",
     className: "border-volt/60 text-volt-text hover:bg-volt/10",
   },
   applied: {
@@ -23,12 +23,16 @@ const LINK_STATES = {
     className: "border-warn/50 text-warn",
   },
   rejected: {
-    label: "Apply",
+    label: "Become a retailer",
     className: "border-volt/60 text-volt-text hover:bg-volt/10",
   },
 } as const;
 
-export function RetailerStatusChip() {
+export function RetailerStatusChip({
+  variant = "chip",
+}: {
+  variant?: "chip" | "menu";
+}) {
   const status = useRetailer((s) => s.status);
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -116,6 +120,26 @@ export function RetailerStatusChip() {
   }
 
   const s = LINK_STATES[status];
+
+  // In the mobile menu the retailer CTA is a full-width nav row, filled with
+  // volt when it is the action on offer and outlined when an application is
+  // already pending.
+  if (variant === "menu") {
+    const isCta = status === "none" || status === "rejected";
+    return (
+      <Link
+        href="/retailer"
+        aria-label={`Retailer status: ${s.label}`}
+        className={`flex w-full items-center rounded-lg px-3 py-2.5 text-sm transition-colors ${
+          isCta
+            ? "bg-volt font-semibold text-volt-ink hover:brightness-105"
+            : "border border-warn/40 font-medium text-warn hover:bg-warn/10"
+        }`}
+      >
+        {s.label}
+      </Link>
+    );
+  }
 
   return (
     <Link
