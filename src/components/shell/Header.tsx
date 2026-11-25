@@ -56,7 +56,7 @@ export function Header() {
         </div>
 
         {/* Desktop nav */}
-        <nav className="hidden items-center gap-6 lg:flex">
+        <nav className="hidden items-center gap-5 lg:flex xl:gap-6">
           {NAV_LINKS.map((l) => {
             const active = isActive(l.href);
             return (

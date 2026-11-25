@@ -70,7 +70,7 @@ export function RetailerStatusChip({
           aria-haspopup="menu"
           aria-expanded={open}
           onClick={() => setOpen((o) => !o)}
-          className="flex items-center gap-1 rounded-full border border-good/50 px-2.5 py-1 font-mono text-[10px] font-semibold text-good transition-colors hover:bg-good/10"
+          className="flex items-center gap-1 rounded-full border border-good/50 px-2 py-1 font-mono text-[10px] font-semibold xl:px-2.5 text-good transition-colors hover:bg-good/10"
         >
           Approved
           <ChevronDown
@@ -145,7 +145,7 @@ export function RetailerStatusChip({
     <Link
       href="/retailer"
       aria-label={`Retailer status: ${s.label}`}
-      className={`rounded-full border px-2.5 py-1 font-mono text-[10px] font-semibold transition-colors ${s.className}`}
+      className={`rounded-full border px-2 py-1 font-mono text-[10px] font-semibold xl:px-2.5 transition-colors ${s.className}`}
     >
       {s.label}
     </Link>
