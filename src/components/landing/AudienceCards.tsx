@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ShoppingBag, Store } from "lucide-react";
 
 const CARDS = [
   {
     eyebrow: "Consumer",
+    icon: ShoppingBag,
     title: "Shopping for myself",
     body: "Power banks, earbuds, chargers — buy units at retail, shipped fast.",
     cta: "Shop now",
@@ -11,6 +12,7 @@ const CARDS = [
   },
   {
     eyebrow: "Retailer",
+    icon: Store,
     title: "I run a shop",
     body: "Wholesale from 10 units, trade credit, and restock plans that watch your stock.",
     cta: "Apply for access",
@@ -39,9 +41,17 @@ export function AudienceCards() {
             href={c.href}
             className="group block rounded-xl border border-line bg-bg1 p-7 transition-colors hover:border-volt hover:bg-bg2"
           >
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-volt-text">
-              {c.eyebrow}
-            </p>
+            <div className="flex items-start justify-between gap-4">
+              <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-volt-text">
+                {c.eyebrow}
+              </p>
+              <span
+                aria-hidden
+                className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-line bg-bg2 text-ink-mid transition-colors group-hover:border-volt/40 group-hover:text-volt-text"
+              >
+                <c.icon className="size-4" />
+              </span>
+            </div>
             <h3 className="mt-3 font-display text-xl font-bold tracking-tight text-ink-hi">
               {c.title}
             </h3>
