@@ -19,9 +19,12 @@ export function WhatsAppFab() {
       onClick={() => toast("Would open WhatsApp support chat")}
       className={`${
         hasMobileBottomBar ? "hidden sm:flex" : "flex"
-      } fixed bottom-5 right-5 z-60 h-[52px] w-[52px] items-center justify-center rounded-full bg-whatsapp text-white shadow-[0_10px_24px_rgba(37,211,102,0.4)] transition-all hover:brightness-105 active:translate-y-px`}
+      } fixed bottom-5 right-5 z-60 h-[52px] min-w-[52px] items-center justify-center gap-2 rounded-full bg-whatsapp pl-4 pr-4 text-white shadow-[0_10px_24px_rgba(37,211,102,0.4)] transition-all hover:brightness-105 active:translate-y-px sm:pr-5`}
     >
-      <MessageCircle className="size-6" />
+      <MessageCircle className="size-6 shrink-0" />
+      <span className="hidden whitespace-nowrap text-sm font-medium sm:inline">
+        Need a hand?
+      </span>
     </button>
   );
 }
