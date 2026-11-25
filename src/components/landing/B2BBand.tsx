@@ -23,15 +23,37 @@ export function B2BBand() {
         >
           <LightningBolt />
         </div>
-        <h2 className="max-w-xl font-display text-2xl font-bold tracking-tight text-ink-hi md:text-3xl">
-          Stock your shop without the guesswork.
-        </h2>
-        <p className="mt-3 max-w-2xl text-[13.5px] leading-6 text-ink-mid">
-          Wholesale from 10 units, trade credit, and restock plans that watch your stock.
-        </p>
-        <Button asChild size="lg" className="mt-7">
-          <Link href="/retailer">Apply for wholesale access</Link>
-        </Button>
+        <div className="relative flex flex-col gap-8 md:flex-row md:items-end md:justify-between md:gap-12">
+          <div>
+            <h2 className="max-w-xl font-display text-2xl font-bold tracking-tight text-ink-hi md:text-3xl">
+              Stock your shop without the guesswork.
+            </h2>
+            <p className="mt-3 max-w-2xl text-[13.5px] leading-6 text-ink-mid">
+              Wholesale from 10 units, trade credit, and restock plans that watch your stock.
+            </p>
+            <Button asChild size="lg" className="mt-7">
+              <Link href="/retailer">Apply for wholesale access</Link>
+            </Button>
+          </div>
+          <dl className="flex gap-8 border-t border-line pt-6 md:shrink-0 md:flex-col md:gap-5 md:border-l md:border-t-0 md:pl-8 md:pt-0">
+            <div>
+              <dd className="font-display text-2xl font-bold tracking-tight text-ink-hi">
+                10+
+              </dd>
+              <dt className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-ink-low">
+                units to wholesale
+              </dt>
+            </div>
+            <div>
+              <dd className="font-display text-2xl font-bold tracking-tight text-ink-hi">
+                Fast
+              </dd>
+              <dt className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-ink-low">
+                response time
+              </dt>
+            </div>
+          </dl>
+        </div>
       </div>
     </section>
   );
